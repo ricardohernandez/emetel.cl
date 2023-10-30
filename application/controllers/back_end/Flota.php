@@ -201,7 +201,7 @@ class Flota extends CI_Controller {
 				$doc_seguro_danos_compania = $this->security->xss_clean(strip_tags($this->input->post("doc_seguro_danos_compania")));
 				$doc_seguro_danios_poliza = $this->security->xss_clean(strip_tags($this->input->post("doc_seguro_danios_poliza")));
 				$doc_seguro_danios_fecha_venc = $this->security->xss_clean(strip_tags($this->input->post("doc_seguro_danios_fecha_venc")));
-				$equip_tag = $this->security->xss_clean(strip_tags($this->input->post("equip-tag")));
+				$equip_tag = $this->security->xss_clean(strip_tags($this->input->post("equip_tag")));
 				$equip_extintor = $this->security->xss_clean(strip_tags($this->input->post("equip_extintor")));
 				$equip_neumatico_repuesto = $this->security->xss_clean(strip_tags($this->input->post("equip_neumatico_repuesto")));
 				$equip_botiquin = $this->security->xss_clean(strip_tags($this->input->post("equip_botiquin")));
@@ -300,7 +300,7 @@ class Flota extends CI_Controller {
 			if($this->input->is_ajax_request()){
 				$this->checkLogin();
 				$hash_vehiculo=$this->security->xss_clean(strip_tags($this->input->post("hash_vehiculo")));
-				$data=$this->Flotamodel->getDataVehiculos($hash_usuario);
+				$data=$this->Flotamodel->getDataVehiculos($hash_vehiculo);
 			
 				if($data){
 					echo json_encode(array('res'=>"ok", 'datos' => $data));exit;

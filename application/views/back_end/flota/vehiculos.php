@@ -101,9 +101,9 @@
            "class":"centered center margen-td","data": function(row,type,val,meta){
               btn='<center><a data-toggle="modal" href="#modal_vehiculo" data-hash_vehiculo="'+row.hash_vehiculo+'" data-placement="top" data-toggle="tooltip" title="Modificar" class="fa fa-edit btn_modificar_usuario"></a>';
               
-              /* if(perfil==1 || perfil==2){
+              if(perfil==1){
                 btn+='<a href="#" data-placement="top" data-toggle="tooltip" title="Eliminar" class="fa fa-trash borrar_vehiculo" data-hash_vehiculo="'+row.hash_vehiculo+'"></a></center>';
-              } */
+              }
               
               return btn;
             }
@@ -146,9 +146,7 @@
           { "data": "motivo_baja", "class": "margen-td centered" },
           { "data": "comprador", "class": "margen-td centered" },
           { "data": "observacion", "class": "margen-td centered" },
-      
         ]
-
       }); 
   
 
@@ -162,7 +160,6 @@
          $(".btn_filtro_vehiculos").html('<i class="fa fa-cog fa-spin fa-1x fa-fw"></i><span class="sr-only"></span> Filtrando');
          listaVehiculos.ajax.reload();
       });
-
 
       String.prototype.capitalize = function() {
           return this.charAt(0).toUpperCase() + this.slice(1);
@@ -180,7 +177,7 @@
           tabla.dataTable().fnAdjustColumnSizing();
         }
       }
-      const tablasAjustar = ['tabla_fa', 'tabla_fb', 'tabla_ca', 'tabla_ca', 'tabla_cia', 'tabla_cib'];
+      const tablasAjustar = ['listaVehiculos'];
 
       tablasAjustar.forEach(nombreTabla => {
         setTimeout(() => {
@@ -259,7 +256,6 @@
       });
     });
 
-
     $(document).off('click', '.btn_modificar_usuario').on('click', '.btn_modificar_usuario',function(event) {
       $(".cont_edit").show();
       $("#hash_vehiculo").val("");
@@ -288,37 +284,47 @@
         
           if(data.res=="ok"){
             for(dato in data.datos){
-              /* $("#nombres").val(data.datos[dato].nombres);
-              $("#apellidos").val(data.datos[dato].apellidos);
+            
+              $("#patente").val(data.datos[dato].patente);
+              $("#kilometraje").val(data.datos[dato].kilometraje);
+              $("#anio").val(data.datos[dato].anio);
+              $("#fecha_alta").val(data.datos[dato].fecha_alta);
               $("#empresa").val(data.datos[dato].empresa);
-              $("#rut").val(data.datos[dato].rut);
-              $("#nacionalidad").val(data.datos[dato].nacionalidad);
-              $("#domicilio").val(data.datos[dato].domicilio);
-              $("#comuna").val(data.datos[dato].comuna);
-              $("#ciudad").val(data.datos[dato].ciudad);
-              $("#subzona").val(data.datos[dato].subzona);  
-              $("#celular_empresa").val(data.datos[dato].celular_empresa);
-              $("#celular_personal").val(data.datos[dato].celular_personal);
-              $("#correo_empresa").val(data.datos[dato].correo_empresa);
-              $("#correo_personal").val(data.datos[dato].correo_personal);
-              $("#fecha_nacimiento").val(data.datos[dato].fecha_nacimiento);
-              $("#fecha_ingreso").val(data.datos[dato].fecha_ingreso);
-              $("#codigo").val(data.datos[dato].codigo);
-              $("#sexo  option[value='"+data.datos[dato].sexo+"'").prop("selected", true);
-              $("#estado_civil  option[value='"+data.datos[dato].estado_civil+"'").prop("selected", true);
-              $("#perfil  option[value='"+data.datos[dato].id_perfil+"'").prop("selected", true);
-              $("#nivel_tecnico  option[value='"+data.datos[dato].id_nivel_tecnico+"'").prop("selected", true);
-              $("#cargo  option[value='"+data.datos[dato].id_cargo+"'").prop("selected", true);
-              $("#area  option[value='"+data.datos[dato].id_area+"'").prop("selected", true);
-              $("#plaza  option[value='"+data.datos[dato].id_plaza+"'").prop("selected", true);
-              $("#proyecto  option[value='"+data.datos[dato].id_proyecto+"'").prop("selected", true);
-              $("#jefe  option[value='"+data.datos[dato].id_jefe+"'").prop("selected", true);
-              $("#estado  option[value='"+data.datos[dato].estado+"'").prop("selected", true);
-              $("#zapato  option[value='"+data.datos[dato].talla_zapato+"'").prop("selected", true);
-              $("#pantalon  option[value='"+data.datos[dato].talla_pantalon+"'").prop("selected", true);
-              $("#polera  option[value='"+data.datos[dato].talla_polera+"'").prop("selected", true);
-              $("#cazadora  option[value='"+data.datos[dato].talla_cazadora+"'").prop("selected", true);
-              $("#tipo_contrato  option[value='"+data.datos[dato].id_tipo_contrato+"'").prop("selected", true); */
+              $("#numero_motor").val(data.datos[dato].numero_motor);
+              $("#numero_chasis").val(data.datos[dato].numero_chasis);
+              $("#color").val(data.datos[dato].color);
+              $("#fecha_baja").val(data.datos[dato].fecha_baja);
+              $("#comprador").val(data.datos[dato].comprador);
+              $("#observacion").val(data.datos[dato].observacion);
+              $("#tipo_mantenimiento  option[value='"+data.datos[dato].id_tipo_mantenimiento+"'").prop("selected", true);
+              $("#estado  option[value='"+data.datos[dato].id_estado+"'").prop("selected", true);
+              $("#tipos_mmc  option[value='"+data.datos[dato].id_tipo+"'").prop("selected", true);
+              $("#sucursal  option[value='"+data.datos[dato].id_sucursal+"'").prop("selected", true);
+              $("#motivo_baja  option[value='"+data.datos[dato].id_motivo_baja+"'").prop("selected", true);
+              $("#conductor_actual  option[value='"+data.datos[dato].id_conductor_actual+"'").prop("selected", true);
+              $("#conductor_anterior  option[value='"+data.datos[dato].id_conductor_anterior+"'").prop("selected", true);
+              $("#conductor_actual_fecha_ini").val(data.datos[dato].conductor_actual_fecha_ini);
+              $("#conductor_anterior_fecha_ini").val(data.datos[dato].conductor_anterior_fecha_ini);
+
+              $("#doc_perm_circ_fecha_venc").val(data.datos[dato].doc_perm_circ_fecha_venc);
+              $("#doc_rev_tec_fecha_venc").val(data.datos[dato].doc_rev_tec_fecha_venc);
+              $("#doc_rev_gases_fecha_venc").val(data.datos[dato].doc_rev_gases_fecha_venc);
+              $("#doc_seg_oblig_fecha_venc").val(data.datos[dato].doc_seg_oblig_fecha_venc);
+              $("#doc_seg_dan_compania").val(data.datos[dato].doc_seg_dan_compania);
+              $("#doc_seg_danios_poliza").val(data.datos[dato].doc_seg_danios_poliza);
+              $("#doc_seg_danios_fecha_venc").val(data.datos[dato].doc_seg_danios_fecha_venc);
+              $("#equip_extintor_fecha_venc").val(data.datos[dato].equip_extintor_fecha_venc);
+
+              $("#equip_tag").prop("checked", data.datos[dato].equip_tag === "on");
+              $("#equip_extintor").prop("checked", data.datos[dato].equip_extintor === "on");
+              $("#equip_neumatico_repuesto").prop("checked", data.datos[dato].equip_neumatico_repuesto === "on");
+              $("#equip_botiquin").prop("checked", data.datos[dato].equip_botiquin === "on");
+              $("#equip_llave_rueda").prop("checked", data.datos[dato].equip_llave_rueda === "on");
+              $("#equip_gata").prop("checked", data.datos[dato].equip_gata === "on");
+              $("#equip_gps").prop("checked", data.datos[dato].equip_gps === "on");
+
+              $("#equip_tarj_comb_num").val(data.datos[dato].equip_tarj_comb_num);
+              $("#equip_tarj_clave").val(data.datos[dato].equip_tarj_clave);
               
             } 
           }
@@ -383,10 +389,6 @@
     
   /********OTROS**********/
     
-    $(document).off('change', '#check_estado').on('change', '#check_estado',function(event) {
-      $(".btn_filtro_vehiculos").html('<i class="fa fa-cog fa-spin fa-1x fa-fw"></i><span class="sr-only"></span> Filtrando').prop("disabled" , true);
-      listaVehiculos.ajax.reload()
-    });
 
     $(document).off('click', '.excel_vehiculos').on('click', '.excel_vehiculos',function(event) {
       event.preventDefault();
@@ -437,13 +439,6 @@
      </div>
     </div>
 
-    <div class="col-12 col-lg-2">  
-      <div class="custom-control custom-checkbox" style="margin-top: 4px;">
-        <input type="checkbox"  class="custom-control-input check_estado" id="check_estado" name="check_estado">
-        <label class="custom-control-label" for="check_estado">Incluir inactivos</label>
-      </div>
-    </div>
-
     <div class="col-6 col-lg-1">
       <div class="form-group">
        <button type="button" class="btn-block btn btn-sm btn-primary btn_filtro_vehiculos btn_xr3">
@@ -452,13 +447,13 @@
      </div>
     </div>
 
-    <div class="col-6 col-lg-1">  
+    <!-- <div class="col-6 col-lg-1">  
       <div class="form-group">
        <button type="button"  class="btn-block btn btn-sm btn-primary excel_vehiculos btn_xr3">
        <i class="fa fa-save"></i> Excel
        </button>
       </div>
-    </div>
+    </div> -->
     
     </div>            
 
@@ -772,10 +767,10 @@
 
                 <div class="col-lg-2">
                   <div class="form-group">
-                    <label for="equip-tag" class="form-check-label">Equip.-Tag</label>
+                    <label for="equip_tag" class="form-check-label">Equip.-Tag</label>
                     <div class="custom-control custom-switch">
-                      <input type="checkbox" class="custom-control-input" id="equip-tag" name="equip-tag">
-                      <label class="custom-control-label" for="equip-tag"></label>
+                      <input type="checkbox" class="custom-control-input" id="equip_tag" name="equip_tag">
+                      <label class="custom-control-label" for="equip_tag"></label>
                     </div>
                   </div>
                 </div>

@@ -178,7 +178,7 @@
                      <a href="#">Aplicaciones</a>
                      <ul class="nav__dropdown-menu">
                    
-                        <li><a  class="menu_list" href="<?php echo base_url() ?>flota"> Flota</a></li>
+                        <li><a  class="menu_list" href="<?php echo base_url() ?>flota"> Control Flota</a></li>
 
                      </ul>
                   </li>

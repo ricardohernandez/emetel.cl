@@ -156,18 +156,31 @@
 
 /******************VEHICULOS*************************/
 
-	$route['flota'] = "back_end/flota/index";
-	$route['vistaVehiculos'] = "back_end/flota/vistaVehiculos";
-	$route['listaVehiculos'] = "back_end/flota/listaVehiculos";
-	$route['formVehiculos'] = "back_end/flota/formVehiculos";
-	$route['getDataVehiculos'] = "back_end/flota/getDataVehiculos";
-	$route['eliminaVehiculos'] = "back_end/flota/eliminaVehiculos";
+	$route['flota'] = "back_end/flota/flota/index";
+	$route['vistaVehiculos'] = "back_end/flota/flota/vistaVehiculos";
+	$route['listaVehiculos'] = "back_end/flota/flota/listaVehiculos";
+	$route['formVehiculos'] = "back_end/flota/flota/formVehiculos";
+	$route['getDataVehiculos'] = "back_end/flota/flota/getDataVehiculos";
+	$route['eliminaVehiculos'] = "back_end/flota/flota/eliminaVehiculos";
 
+	$route['vistaMantenciones'] = "back_end/flota/Mantenedores/vistaMantenciones";
+	$route['listaMmc'] = "back_end/flota/Mantenedores/listaMmc";
+	$route['formMmc'] = "back_end/flota/Mantenedores/formMmc";
+	$route['getDataMmc'] = "back_end/flota/Mantenedores/getDataMmc";
+	$route['eliminaMmc'] = "back_end/flota/Mantenedores/eliminaMmc";
 
+	$route['listaModelos'] = "back_end/flota/Mantenedores/listaModelos";
+	$route['formModelo'] = "back_end/flota/Mantenedores/formModelo";
+	$route['eliminarModelo'] = "back_end/flota/Mantenedores/eliminarModelo";
+	$route['getDataModelo'] = "back_end/flota/Mantenedores/getDataModelo";
 
-
-
-
+	$route['listaMarcas'] = "back_end/flota/Mantenedores/listaMarcas";
+	$route['formMarca'] = "back_end/flota/Mantenedores/formMarca";
+	$route['eliminarMarca'] = "back_end/flota/Mantenedores/eliminarMarca";
+	$route['getDataMarca'] = "back_end/flota/Mantenedores/getDataMarca";
+	
+	
+	
 
 
 /* End of file routes.php */

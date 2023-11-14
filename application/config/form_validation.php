@@ -359,9 +359,68 @@ $config = array(
                         'label' => 'Equip.-Tarj.Clave',
                         'rules' => 'trim'
                     )
-               ),
+            ),
 
+            'formMarca' => array(
+                array(
+                    'field'   => 'marca_ma',
+                    'label'   => 'Marca',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'estado_ma',
+                    'label'   => 'Estado',
+                    'rules'   => 'trim|required'
+                )
+            ),
+            
 
+            'formModelo' => array(
+                array(
+                    'field'   => 'marca_m',
+                    'label'   => 'Marca',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'modelo_m',
+                    'label'   => 'Modelo',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'estado_m',
+                    'label'   => 'Estado',
+                    'rules'   => 'trim|required'
+                )
+            ),
+            
+            
+            
+            'formMmc' => array(
+                array(
+                    'field'   => 'tipo',
+                    'label'   => 'Tipo',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'marca',
+                    'label'   => 'Marca',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'modelo',
+                    'label'   => 'Modelo',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'combustible',
+                    'label'   => 'Combustible',
+                    'rules'   => 'trim|required'
+                )
+            ),
             
  );
 
+ 
+ 
+ 
+ 

@@ -138,9 +138,12 @@
     }
 
     .fa-edit{
-        color:teal;
+        color:#1A56DB;
     }
 
+    .fa-trash{
+        margin-top:4px!important;
+    }
     .fa-file{
         color:#fff;
     }

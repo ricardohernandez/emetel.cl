@@ -7,7 +7,7 @@ class Flota extends CI_Controller {
 		if($this->uri->segment("1")==""){
 			redirect("inicio");
 		}
-		$this->load->model("back_end/Flotamodel");
+		$this->load->model("back_end/flota/Flotamodel");
 		$this->load->model("back_end/Iniciomodel");
 		$this->load->library('user_agent');
 	}
@@ -315,9 +315,9 @@ class Flota extends CI_Controller {
 		public function eliminaVehiculos(){
 			$hash_vehiculo=$this->security->xss_clean(strip_tags($this->input->post("hash_vehiculo")));
 		    if($this->Flotamodel->eliminaVehiculos($hash_vehiculo)){
-		      echo json_encode(array("res" => "ok" , "msg" => "Usuario eliminado correctamente."));
+		      echo json_encode(array("res" => "ok" , "msg" => "Registro eliminado correctamente."));
 		    }else{
-		      echo json_encode(array("res" => "error" , "msg" => "Problemas eliminando el usuario, intente nuevamente."));
+		      echo json_encode(array("res" => "error" , "msg" => "Problemas eliminando el registro, intente nuevamente."));
 		    }
 		}
 

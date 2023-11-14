@@ -287,7 +287,7 @@ class Inicio extends CI_Controller {
 			$this->acceso();
 			$this->visitas("Inicio");
 		    $datos = array(
-		       'titulo' => "PTO XR3",
+		       'titulo' => "PTO EMETEL",
 		       'perfiles' => $this->Iniciomodel->listaPerfiles(),
 			);  
 			$this->load->view('inicio',$datos);

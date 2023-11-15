@@ -164,6 +164,21 @@
 	$route['eliminaVehiculos'] = "back_end/flota/flota/eliminaVehiculos";
 
 	$route['vistaMantenciones'] = "back_end/flota/Mantenedores/vistaMantenciones";
+	$route['listaTiposMmc'] = "back_end/flota/Mantenedores/listaTiposMmc";
+	
+	
+
+
+	$route['listaMat'] = "back_end/flota/Mantenedores/listaMat";
+	$route['formMat'] = "back_end/flota/Mantenedores/formMat";
+	$route['getDataMat'] = "back_end/flota/Mantenedores/getDataMat";
+	$route['eliminarMat'] = "back_end/flota/Mantenedores/eliminarMat";
+	
+	$route['listaActividades'] = "back_end/flota/Mantenedores/listaActividades";
+	$route['formActividad'] = "back_end/flota/Mantenedores/formActividad";
+	$route['getDataActividad'] = "back_end/flota/Mantenedores/getDataActividad";
+	$route['eliminarActividad'] = "back_end/flota/Mantenedores/eliminarActividad";
+
 	$route['listaMmc'] = "back_end/flota/Mantenedores/listaMmc";
 	$route['formMmc'] = "back_end/flota/Mantenedores/formMmc";
 	$route['getDataMmc'] = "back_end/flota/Mantenedores/getDataMmc";

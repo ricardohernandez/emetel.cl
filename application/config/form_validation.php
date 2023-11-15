@@ -361,6 +361,72 @@ $config = array(
                     )
             ),
 
+            'formMat' => array(
+                array(
+                    'field'   => 'tipo_mat',
+                    'label'   => 'Tipo',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'actividad_mat',
+                    'label'   => 'Actividad',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'unidad_mat',
+                    'label'   => 'Unidad',
+                    'rules'   => 'trim'
+                ),
+                array(
+                    'field'   => 'rango_mat',
+                    'label'   => 'Rango',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'estado_mat',
+                    'label'   => 'Estado',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'desde_mat',
+                    'label'   => 'Desde',
+                    'rules'   => 'trim|required'
+                ),  
+                array(
+                    'field'   => 'hasta_mat',
+                    'label'   => 'Hasta',
+                    'rules'   => 'trim|required'
+                )
+            ),
+
+            'formActividad' => array(
+                array(
+                    'field'   => 'actividad',
+                    'label'   => 'Actividad',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'tipo_a',
+                    'label'   => 'Tipo',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'unidad',
+                    'label'   => 'Unidad',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'rango',
+                    'label'   => 'Rango',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'estado_a',
+                    'label'   => 'Estado',
+                    'rules'   => 'trim|required'
+                )
+            ),
+  
             'formMarca' => array(
                 array(
                     'field'   => 'marca_ma',

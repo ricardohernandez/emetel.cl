@@ -13,6 +13,169 @@ class Mantenedoresmodel extends CI_Model {
 		return FALSE;
 	}
 
+	//ASIGNACION ACTIVIDADES
+		public function listaMat($estado){
+			$this->db->select("sha1(mat.id) as hash_mat, 
+				mat.*,
+				vma.marca as marca,
+				vmo.modelo as modelo,
+				vc.combustible as combustible,
+				vact.actividad as actividad,
+				vact.tipo as tipo,
+				vact.unidad as unidad,
+				CONCAT(mat.desde,' - ',mat.hasta) as  'fechas',
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+
+			");
+
+			$this->db->join('vehiculos_tipos_mmc as tmmc', 'tmmc.id = mat.id_tipo_mmc', 'left');
+			$this->db->join('vehiculos_tipo as vt', 'vt.id = tmmc.id_tipo', 'left');
+			$this->db->join('vehiculos_marca as vma', 'vma.id = tmmc.id_marca', 'left');
+			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = tmmc.id_modelo', 'left');
+			$this->db->join('vehiculos_combustible as vc', 'vc.id = tmmc.id_combustible', 'left');
+			$this->db->join('vehiculos_mantenciones_actividades as vact', 'vact.id = mat.id_actividad', 'left');
+		
+			$res=$this->db->get('vehiculos_mantenciones_tipos mat');
+			if($res->num_rows()>0){
+				return $res->result_array();
+			}
+			return FALSE;
+		}
+ 
+
+		public function getDataMat($hash){ 
+			$this->db->select("sha1(mat.id) as hash_mat, 
+				mat.*,
+				vma.marca as marca,
+				vmo.modelo as modelo,
+				vc.combustible as combustible,
+				vact.actividad as actividad,
+				CONCAT(mat.desde,' - ',mat.hasta) as  'fechas',
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+
+			");
+
+			$this->db->join('vehiculos_tipos_mmc as tmmc', 'tmmc.id = mat.id_tipo_mmc', 'left');
+			$this->db->join('vehiculos_tipo as vt', 'vt.id = tmmc.id_tipo', 'left');
+			$this->db->join('vehiculos_marca as vma', 'vma.id = tmmc.id_marca', 'left');
+			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = tmmc.id_modelo', 'left');
+			$this->db->join('vehiculos_combustible as vc', 'vc.id = tmmc.id_combustible', 'left');
+			$this->db->join('vehiculos_mantenciones_actividades as vact', 'vact.id = mat.id_actividad', 'left');
+			$this->db->where('sha1(mat.id)', $hash);
+			$res=$this->db->get(' vehiculos_mantenciones_tipos mat');
+			
+			if($res->num_rows()>0){
+				return $res->result_array();
+			}
+		}
+
+		public function formMat($data){
+			if($this->db->insert(' vehiculos_mantenciones_tipos', $data)){
+				return $this->db->insert_id();
+			}
+			return FALSE;
+		}
+
+		public function actualizarMat($hash,$data){
+			$this->db->where('sha1(id)', $hash);
+			if($this->db->update('vehiculos_mantenciones_tipos', $data)){
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+		public function existeMat($data){
+			unset($data['ultima_actualizacion']);
+			$this->db->where($data);
+			$res = $this->db->get(' vehiculos_mantenciones_tipos');
+			return $res->num_rows() > 0;
+		}
+
+		public function existeMatMod($hash,$data){
+			unset($data['ultima_actualizacion']);
+			$this->db->where('sha1(id)<>', $hash);
+			$this->db->where($data);
+			$res = $this->db->get(' vehiculos_mantenciones_tipos');
+			return $res->num_rows() > 0;
+		}
+
+
+		public function eliminarMat($hash){
+			
+			$this->db->where('sha1(id)', $hash);
+			if($this ->db->delete(' vehiculos_mantenciones_tipos')){
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+
+
+
+	//ACTIVIDADES
+		public function listaActividades($estado){
+			$this->db->select("sha1(vac.id) as hash_vac,
+				vac.*,
+			");
+
+			$res=$this->db->get('vehiculos_mantenciones_actividades vac');
+			if($res->num_rows()>0){
+				return $res->result_array();
+			}
+			return FALSE;
+		}
+
+		public function getDataActividad($hash){ 
+			$this->db->select("sha1(vac.id) as hash_vac,
+				vac.*,
+			");
+
+			$this->db->where('sha1(vac.id)', $hash);
+			$res=$this->db->get('vehiculos_mantenciones_actividades vac');
+			
+			if($res->num_rows()>0){
+				return $res->result_array();
+			}
+		}
+
+		public function formActividad($data){
+			if($this->db->insert('vehiculos_mantenciones_actividades', $data)){
+				return $this->db->insert_id();
+			}
+			return FALSE;
+		}
+
+		public function actualizarActividad($hash,$data){
+			$this->db->where('sha1(id)', $hash);
+			if($this->db->update('vehiculos_mantenciones_actividades', $data)){
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+		public function existeActividad($data){
+			$this->db->where($data);
+			$res = $this->db->get('vehiculos_mantenciones_actividades');
+			return $res->num_rows() > 0;
+		}
+
+		public function existeActividadMod($hash,$data){
+			$this->db->where('sha1(id)<>', $hash);
+			$this->db->where($data);
+			$res = $this->db->get('vehiculos_mantenciones_actividades');
+			return $res->num_rows() > 0;
+		}
+
+
+		public function eliminarActividad($hash){
+			$this->db->where('sha1(id)', $hash);
+			if($this ->db->delete('vehiculos_mantenciones_actividades')){
+				return TRUE;
+			}
+			return FALSE;
+		}
+
+
 	//MMC
  	
 		public function listaMmc($estado){
@@ -246,6 +409,58 @@ class Mantenedoresmodel extends CI_Model {
 		}
 
 		
+
+		public function listaActividadesOpt(){
+			$this->db->order_by('actividad', 'asc');
+			$this->db->where('estado', "activo");
+			$res=$this->db->get('vehiculos_mantenciones_actividades');
+			if($res->num_rows()>0){
+				return $res->result_array();
+			}
+			return FALSE;
+		}
+
+		public function listaTiposMMC(){
+			$this->db->select("
+				vtm.id as id,
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+			");
+
+ 			$this->db->join('vehiculos_tipo as vt', 'vt.id = vtm.id_tipo', 'left');
+			$this->db->join('vehiculos_marca as vma', 'vma.id = vtm.id_marca', 'left');
+			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = vtm.id_modelo', 'left');
+			$this->db->join('vehiculos_combustible as vc', 'vc.id = vtm.id_combustible', 'left');
+			$res=$this->db->get('vehiculos_tipos_mmc vtm');
+			if($res->num_rows()>0){
+				return $res->result_array();
+			}
+			return FALSE;
+		}
+
+		public function listaTiposMmcS2(){
+			$this->db->select("vtm.id as id,
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+			");
+	
+			$this->db->join('vehiculos_tipo as vt', 'vt.id = vtm.id_tipo', 'left');
+			$this->db->join('vehiculos_marca as vma', 'vma.id = vtm.id_marca', 'left');
+			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = vtm.id_modelo', 'left');
+			$this->db->join('vehiculos_combustible as vc', 'vc.id = vtm.id_combustible', 'left');
+			$res=$this->db->get('vehiculos_tipos_mmc vtm');
+
+			if($res->num_rows()>0){
+				$array=array();
+				foreach($res->result_array() as $key){
+					$temp=array();
+					$temp["id"]=$key["id"];
+					$temp["text"]=$key["tipo"];
+					$array[]=$temp;
+				}
+				return json_encode($array);
+			}
+			return FALSE;
+		}
+
 
 }
 

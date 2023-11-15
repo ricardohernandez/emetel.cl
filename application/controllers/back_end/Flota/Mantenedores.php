@@ -53,28 +53,216 @@ class Mantenedores extends CI_Controller {
 	}
 
 	
-		public function vistaMantenciones(){
-			if($this->input->is_ajax_request()){
-				$desde = date('d-m-Y', strtotime('-365 day', strtotime(date("d-m-Y"))));
-				$hasta = date('d-m-Y');
-				$combustibles = $this->Flotamodel->listaCombustibles();
-				$marcas = $this->Flotamodel->listaMarcas();
-				$modelos = $this->Flotamodel->listaModelos();
-				$tipos = $this->Flotamodel->listaTipos();
-				
-				$datos = array(
-					'desde' => $desde,
-					'hasta' => $hasta,
-					'tipos' => $tipos,
-					'marcas' => $marcas,
-					'modelos' => $modelos,
-					'combustibles' => $combustibles,
-				);
+	public function vistaMantenciones(){
+		if($this->input->is_ajax_request()){
+			$desde = date('d-m-Y', strtotime('-365 day', strtotime(date("d-m-Y"))));
+			$hasta = date('d-m-Y');
+			$combustibles = $this->Flotamodel->listaCombustibles();
+			$marcas = $this->Flotamodel->listaMarcas();
+			$modelos = $this->Flotamodel->listaModelos();
+			$tipos = $this->Flotamodel->listaTipos();
+			$tipos_mmc = $this->Mantenedoresmodel->listaTiposMMC();
+			$actividades = $this->Mantenedoresmodel->listaActividadesOpt();
+			
+			$datos = array(
+				'desde' => $desde,
+				'hasta' => $hasta,
+				'tipos' => $tipos,
+				'tipos_mmc' => $tipos_mmc,
+				'marcas' => $marcas,
+				'modelos' => $modelos,
+				'combustibles' => $combustibles,
+				'actividades' => $actividades,
+			);
 
-				$this->load->view('back_end/flota/mantenedores/mantenciones',$datos);
-			}
+			$this->load->view('back_end/flota/mantenedores/mantenciones',$datos);
 		}
+	}
+
+
+		//ASIGNACION ACTIVIDADES
+			public function listaMat(){
+				$estado=$this->security->xss_clean(strip_tags($this->input->get_post("estado")));
+				echo json_encode($this->Mantenedoresmodel->listaMat($estado));
+			}
+
+			public function listaTiposMmc(){
+ 				echo $this->Mantenedoresmodel->listaTiposMmcS2();
+			}
+
+			public function formMat(){
+				if($this->input->is_ajax_request()){
+					$this->checkLogin();
+					$hash_mat=$this->security->xss_clean(strip_tags($this->input->post("hash_mat")));
+					$actividad = $this->security->xss_clean(strip_tags($this->input->post("actividad_mat")));
+					$tipo = $this->security->xss_clean(strip_tags($this->input->post("tipo_mat")));
+					$unidad = $this->security->xss_clean(strip_tags($this->input->post("unidad_mat")));
+					$rango = $this->security->xss_clean(strip_tags($this->input->post("rango_mat")));
+					$estado = $this->security->xss_clean(strip_tags($this->input->post("estado_mat")));
+					$desde = $this->security->xss_clean(strip_tags($this->input->post("desde_mat")));
+					$hasta = $this->security->xss_clean(strip_tags($this->input->post("hasta_mat")));
+					$ultima_actualizacion=date("Y-m-d G:i:s")." | ".$this->session->userdata("nombres")." ".$this->session->userdata("apellidos");
+
+					if ($this->form_validation->run("formMat") == FALSE){
+						echo json_encode(array('res'=>"error", 'msg' => strip_tags(validation_errors())));exit;
+					}else{	
+
+						$data = array(
+							"id_tipo_mmc" => $tipo,
+							"id_actividad" => $actividad,
+							"unidad" => $unidad,
+							"rango" => $rango,
+							"estado" => $estado,
+							"desde" => $desde,
+							"hasta" => $hasta,
+							"ultima_actualizacion" => $ultima_actualizacion,
+						);
+						
+						if($hash_mat==""){
+
+							$existe = $this->Mantenedoresmodel->existeMat($data);
+
+							if($existe){
+								echo json_encode(array("res" => "error" , "msg" => "Ya existe una configuracion de mantención con estos parametros."));exit;
+							}
+
+							$id=$this->Mantenedoresmodel->formMat($data);
+							if($id!=FALSE){
+								echo json_encode(array('res'=>"ok", 'msg' => OK_MSG));exit;
+							}else{
+								echo json_encode(array('res'=>"ok", 'msg' => MOD_MSG));exit;
+							}
+							
+						}else{
+
+							$existe = $this->Mantenedoresmodel->existeMatMod($hash_mat,$data);
+
+							if($existe){
+								echo json_encode(array("res" => "error" , "msg" => "Ya existe una actividad de mantención con estos parametros."));exit;
+							}
+
+							if($this->Mantenedoresmodel->actualizarMat($hash_mat,$data)){
+								echo json_encode(array('res'=>"ok", 'msg' => MOD_MSG));exit;
+							}else{
+								echo json_encode(array('res'=>"ok",  'msg' => MOD_MSG));exit;
+							}
+						}
+					}	
+				}
+			}
+
+			public function getDataMat(){
+				if($this->input->is_ajax_request()){
+					$this->checkLogin();
+					$hash_mat=$this->security->xss_clean(strip_tags($this->input->post("hash")));
+					$data=$this->Mantenedoresmodel->getDataMat($hash_mat);
+				
+					if($data){
+						echo json_encode(array('res'=>"ok", 'datos' => $data));exit;
+					}else{
+						echo json_encode(array('res'=>"error", 'msg' => ERROR_MSG));exit;
+					}	
+				}else{
+					exit('No direct script access allowed');
+				}
+			}
+
+			public function eliminarMat(){
+				$hash_mat=$this->security->xss_clean(strip_tags($this->input->post("hash")));
+				if($this->Mantenedoresmodel->eliminarMat($hash_mat)){
+					echo json_encode(array("res" => "ok" , "msg" => "Registro eliminado correctamente."));
+				}else{
+					echo json_encode(array("res" => "error" , "msg" => "Problemas eliminando el registro, intente nuevamente."));
+				}
+			}
+			
 	
+		//ACTIVIDADES
+			public function listaActividades(){
+				$estado=$this->security->xss_clean(strip_tags($this->input->get_post("estado")));
+				echo json_encode($this->Mantenedoresmodel->listaActividades($estado));
+			}
+
+			public function formActividad(){
+				if($this->input->is_ajax_request()){
+					$this->checkLogin();
+					$hash_vac=$this->security->xss_clean(strip_tags($this->input->post("hash_actividad")));
+					$actividad = $this->security->xss_clean(strip_tags($this->input->post("actividad")));
+					$tipo = $this->security->xss_clean(strip_tags($this->input->post("tipo_a")));
+					$unidad = $this->security->xss_clean(strip_tags($this->input->post("unidad")));
+					$rango = $this->security->xss_clean(strip_tags($this->input->post("rango")));
+					$estado = $this->security->xss_clean(strip_tags($this->input->post("estado_a")));
+					
+					if ($this->form_validation->run("formActividad") == FALSE){
+						echo json_encode(array('res'=>"error", 'msg' => strip_tags(validation_errors())));exit;
+					}else{	
+
+						$data = array(
+							"actividad" => $actividad,
+							"tipo" => $tipo,
+							"unidad" => $unidad,
+							"rango" => $rango,
+							"estado" => $estado
+						);
+						
+						if($hash_vac==""){
+
+							$existe = $this->Mantenedoresmodel->existeActividad($data);
+
+							if($existe){
+								echo json_encode(array("res" => "error" , "msg" => "Ya existe una configuracion de mantención con estos parametros."));exit;
+							}
+
+							$id=$this->Mantenedoresmodel->formActividad($data);
+							if($id!=FALSE){
+								echo json_encode(array('res'=>"ok", 'msg' => OK_MSG));exit;
+							}else{
+								echo json_encode(array('res'=>"ok", 'msg' => MOD_MSG));exit;
+							}
+							
+						}else{
+
+							$existe = $this->Mantenedoresmodel->existeActividadMod($hash_vac,$data);
+
+							if($existe){
+								echo json_encode(array("res" => "error" , "msg" => "Ya existe una actividad de mantención con estos parametros."));exit;
+							}
+
+							if($this->Mantenedoresmodel->actualizarActividad($hash_vac,$data)){
+								echo json_encode(array('res'=>"ok", 'msg' => MOD_MSG));exit;
+							}else{
+								echo json_encode(array('res'=>"ok",  'msg' => MOD_MSG));exit;
+							}
+						}
+					}	
+				}
+			}
+
+			public function getDataActividad(){
+				if($this->input->is_ajax_request()){
+					$this->checkLogin();
+					$hash_vac=$this->security->xss_clean(strip_tags($this->input->post("hash")));
+					$data=$this->Mantenedoresmodel->getDataActividad($hash_vac);
+				
+					if($data){
+						echo json_encode(array('res'=>"ok", 'datos' => $data));exit;
+					}else{
+						echo json_encode(array('res'=>"error", 'msg' => ERROR_MSG));exit;
+					}	
+				}else{
+					exit('No direct script access allowed');
+				}
+			}
+
+			public function eliminarActividad(){
+				$hash_vac=$this->security->xss_clean(strip_tags($this->input->post("hash")));
+				if($this->Mantenedoresmodel->eliminarActividad($hash_vac)){
+					echo json_encode(array("res" => "ok" , "msg" => "Registro eliminado correctamente."));
+				}else{
+					echo json_encode(array("res" => "error" , "msg" => "Problemas eliminando el registro, intente nuevamente."));
+				}
+			}
+
 	//MMC
 
 		public function listaMmc(){

@@ -1,12 +1,12 @@
 <style type="text/css">
-  .borrar_mmc,.btn_del_modelo,.btn_del_marca{
+  .borrar_mmc,.btn_del_modelo,.btn_del_marca,.btn_del_actividad,.btn_del_mat{
     color: red;
     cursor:pointer;
     font-size: 15px;
     margin-left:10px;
     text-decoration: none;
   }
-   .btn_modificar_mmc,.btn_edit_modelo,.btn_edit_marca{
+   .btn_modificar_mmc,.btn_edit_modelo,.btn_edit_marca,.btn_edit_actividad,.btn_edit_mat{
     font-size: 15px;
     cursor:pointer;
     text-decoration: none;
@@ -22,6 +22,12 @@
     .modal_nuevo_marcas{
       width: 95%!important;
     }
+    .modal_nuevo_actividad{
+      width: 95%!important;
+    }
+    .modal_mat{
+      width: 95%!important;
+    }
   }
 
   @media (min-width: 768px){
@@ -34,17 +40,497 @@
     .modal_nuevo_marcas{
       width: 55%!important;
     }
+    .modal_nuevo_actividad{
+      width: 75%!important;
+    }
+    .modal_mat{
+      width: 75%!important;
+    }
   }
+
 
 </style>
 
 <script type="text/javascript">
+  $.fn.modal.Constructor.prototype.enforceFocus = function() {}; 
+
   $(function(){
 
     const perfil="<?php echo $this->session->userdata('id_perfil'); ?>";
     const base = "<?php echo base_url() ?>";
+
+    $.fn.modal.Constructor.prototype.enforceFocus = function() {}; 
+
+  /*********ASIGNACION ACTIVIDADES************/
+
+     var tabla_mat = $('#tabla_mat').DataTable({
+      //"sDom": '<"row view-filter"<"col-sm-12"<"pull-left"l><"pull-right"f><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"ip>>>',
+      "bPaginate": false,
+      "aaSorting" : [1,"asc"],
+      //"stateSave": true,
+      "bLengthChange": false,
+      "bFilter": false,
+      "bSort": true,
+      "bInfo": false,
+      "bProcessing": false,
+      "pagingType": false , 
+      //"responsive":true,
+      // "scrollY": 220,
+      // "scrollX": true,
+        "oLanguage": { 
+          "sProcessing":     "Procesando...",
+          "sLengthMenu":     "Mostrar: _MENU_ ",
+          "sZeroRecords":    "No se encontraron resultados",
+          "sEmptyTable":     "Ningún dato disponible en esta tabla",
+          "sInfo":           "Registros del _START_ al _END_ de un total de _TOTAL_ ",
+          "sInfoEmpty":      "Sin registros",
+          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix":    "",
+          "sSearch":         "",     
+          "sSearchPlaceholder": "Busqueda",
+          "sUrl":            "",
+          "sInfoThousands":  ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+            "sFirst":    "Primero",
+            "sLast":     "Último",
+            "sNext":     "Siguiente",
+            "sPrevious": "Anterior"
+          },
+          "oAria": {
+            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+        },
+        "bAutoWidth": true,
+        "sAjaxDataProp": "result",        
+        "bDeferRender": true,
+        "ajax": {
+          "url":"<?php echo base_url();?>listaMat",
+          "dataSrc": function (json) {
+              return json;
+          },       
+          data: function(param){
+          }
+        },    
+        "columns": [
+          {
+            "class":"centered","width":"50px","data": function(row,type,val,meta){
+              btn='<center><a data-id="'+row.hash_mat+'"  class="btn_edit_mat"><i class="fa fa-edit" ></i> </a>';
+              btn+='<a data-id="'+row.hash_mat+'"  class="btn_del_mat"><i class="fa fa-trash" ></i> </a></center>';
+              return btn;
+            }
+          }, 
+          { "data": "tipo" ,"width":"40%","class":"margen-td centered"},
+          { "data": "fechas" ,"width":"10%","class":"margen-td centered"},
+          { "data": "actividad" ,"width":"40%","class":"margen-td centered"},
+          { "data": "unidad" ,"width":"10%","class":"margen-td centered"},
+          { "data": "rango" ,"width":"10%","class":"margen-td centered"},
+          { "data": "estado" ,"width":"10%","class":"margen-td centered"},
+        ]
+      }); 
+
+      setTimeout( function () {
+        var tabla_mat = $.fn.dataTable.fnTables(true);
+        if ( tabla_mat.length > 0 ) {
+            $(tabla_mat).dataTable().fnAdjustColumnSizing();
+      }}, 100 ); 
+
+      setTimeout( function () {
+        var tabla_mat = $.fn.dataTable.fnTables(true);
+        if ( tabla_mat.length > 0 ) {
+            $(tabla_mat).dataTable().fnAdjustColumnSizing();
+      }}, 1100 ); 
+
+      async function cargaTipoMat() {
+        $.getJSON(base + "listaTiposMmc", function(data) {
+          response = data;
+          }).done(function() {
+
+          $("#tipo_mat").select2({
+            placeholder: 'Seleccione Tipo | Todos',
+            data: response,
+            width: '100%',    
+            allowClear: true
+          });
+          $('#tipo_mat').val(null).trigger('change.select2');
+
+        });
+      }
+      
+      $(document).off('click', '#mantenedor_mat').on('click', '#mantenedor_mat',function(event) {
+        $('#modal_mat').modal('toggle'); 
+        $(".btn_ingresa_mat").html('<i class="fa fa-save"></i> Guardar');
+        $(".btn_ingresa_mat").attr("disabled", false);
+        $('#formMat')[0].reset();
+        $("#hash_mat").val("");
+        tabla_mat.ajax.reload();
+        cargaTipoMat()
+
+      });     
+      
+      $(document).off('submit', '#formMat').on('submit', '#formMat',function(event) {
+        var url="<?php echo base_url()?>";
+        var formElement = document.querySelector("#formMat");
+        var formData = new FormData(formElement);
+          $.ajax({
+              url: $('#formMat').attr('action')+"?"+$.now(),  
+              type: 'POST',
+              data: formData,
+              cache: false,
+              processData: false,
+              dataType: "json",
+              contentType : false,
+              beforeSend:function(){
+                /* $(".btn_ingresa_mat").attr("disabled", true);
+               */
+              },
+              success: function (data) {
+                $(".btn_ingresa_mat").attr("disabled", false);
+                $(".cierra_mod_modelos").attr("disabled", false);   
+
+                if(data.res == "error"){
+              
+                    $.notify(data.msg, {
+                      className:'error',
+                      globalPosition: 'top right',
+                      autoHideDelay:10000,
+                    });
+                }else if(data.res == "ok"){
+                    $.notify(data.msg, {
+                      className:'success',
+                      globalPosition: 'top right',
+                      autoHideDelay:2000,
+                    });
+
+                    $(".btn_ingresa_mat").html('<i class="fa fa-save"></i> Guardar');
+                    $("#hash_mat").val("");
+                    $('#tipo_mat').val(null).trigger('change.select2');
+
+                    setTimeout(function(){ 
+                      $('#formMat')[0].reset();
+                      tabla_mat.ajax.reload();
+                    } ,1000);  
+                }
+              }
+          });
+          return false; 
+      });
+
+      $(document).off('click', '.btn_del_mat').on('click', '.btn_del_mat',function(event) {
+        hash=$(this).attr("data-id");
+        if(confirm("¿Esta seguro que desea cambiar el estado?")){
+          $.post('eliminarMat'+"?"+$.now(), {hash : hash} ,function(data) {
+            if(data.res=="ok"){
+              $.notify(data.msg, {
+                className:'success',
+                globalPosition: 'top right'
+              });
+            tabla_mat.ajax.reload();
+            }else{
+              $.notify(data.msg, {
+                className:'danger',
+                globalPosition: 'top right'
+              });
+            }
+          },"json");
+        }
+      });
+
+
+      $(document).off('click', '.btn_edit_mat').on('click', '.btn_edit_mat',function(event) {
+         $("#hash_mat").val("");
+         hash=$(this).attr("data-id");
+         $(".btn_ingresa_mat").html('<i class="fa fa-edit"></i> Modificar');
+         $('#formMat')[0].reset();
+         $("#hash_mat").val("");
+         $("#formMat input,#formMat select,#formMat button,#formMat").prop("disabled", true);
+
+          $.ajax({
+            url: "getDataMat"+"?"+$.now(),  
+            type: 'POST',
+            cache: false,
+            tryCount : 0,
+            retryLimit : 3,
+            data:{hash:hash},
+            dataType:"json",
+            beforeSend:function(){
+            /*  $(".btn_ingresa_mat").prop("disabled",true);  */
+            },
+            success: function (data) {
+              if(data.res=="ok"){
+                for(dato in data.datos){
+                  $("#hash_mat").val(data.datos[dato].hash_mat);
+                  $("#actividad_mat option[value='"+data.datos[dato].id_actividad+"'").prop("selected", true);
+                  $('#tipo_mat').val(data.datos[dato].id_tipo_mmc).trigger('change');
+
+                  $("#estado_mat option[value='"+data.datos[dato].estado+"'").prop("selected", true);
+                  $("#unidad_mat").val(data.datos[dato].unidad);
+                  $("#rango_mat").val(data.datos[dato].rango);
+                  $("#desde_mat option[value='"+data.datos[dato].desde+"'").prop("selected", true);
+                  $("#hasta_mat option[value='"+data.datos[dato].hasta+"'").prop("selected", true);
+                }
+                $("#formMat input,#formMat select,#formMat button,#formMat").prop("disabled", false);
+                $(".cierra_mod_modelos").prop("disabled", false);
+                $(".btn_ingresa_mat").prop("disabled", false);   
+                
+              }
+            },
+            error : function(xhr, textStatus, errorThrown ) {
+              if (textStatus == 'timeout') {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.notify("Reintentando...", {
+                        className:'info',
+                        globalPosition: 'top right'
+                      });
+                      $.ajax(this);
+                      return;
+                  } else{
+                     $.notify("Problemas en el servidor, intente nuevamente.", {
+                        className:'warn',
+                        globalPosition: 'top right'
+                      });     
+                      $('#modal_nuevo_mat').modal("toggle");
+                  }    
+                  return;
+              }
+
+              if (xhr.status == 500) {
+                  $.notify("Problemas en el servidor, intente más tarde.", {
+                    className:'warn',
+                    globalPosition: 'top right'
+                  });
+                  $('#modal_nuevo_mat').modal("toggle");
+              }
+          },timeout:5000
+        }); 
+      });
+                      
+  /*********ACTIVIDADES************/
+
+    var tabla_actividades = $('#tabla_actividades').DataTable({
+      //"sDom": '<"row view-filter"<"col-sm-12"<"pull-left"l><"pull-right"f><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"ip>>>',
+      "bPaginate": false,
+      "aaSorting" : [1,"asc"],
+      //"stateSave": true,
+      "bLengthChange": false,
+      "bFilter": false,
+      "bSort": true,
+      "bInfo": false,
+      "bProcessing": false,
+      "pagingType": false , 
+      //"responsive":true,
+      // "scrollY": 220,
+      // "scrollX": true,
+      "oLanguage": { 
+          "sProcessing":     "Procesando...",
+          "sLengthMenu":     "Mostrar: _MENU_ ",
+          "sZeroRecords":    "No se encontraron resultados",
+          "sEmptyTable":     "Ningún dato disponible en esta tabla",
+          "sInfo":           "Registros del _START_ al _END_ de un total de _TOTAL_ ",
+          "sInfoEmpty":      "Sin registros",
+          "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+          "sInfoPostFix":    "",
+          "sSearch":         "",     
+          "sSearchPlaceholder": "Busqueda",
+          "sUrl":            "",
+          "sInfoThousands":  ",",
+          "sLoadingRecords": "Cargando...",
+          "oPaginate": {
+            "sFirst":    "Primero",
+            "sLast":     "Último",
+            "sNext":     "Siguiente",
+            "sPrevious": "Anterior"
+          },
+          "oAria": {
+            "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+            "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+          }
+        },
+        "bAutoWidth": true,
+        "sAjaxDataProp": "result",        
+        "bDeferRender": true,
+        "ajax": {
+          "url":"<?php echo base_url();?>listaActividades",
+          "dataSrc": function (json) {
+              return json;
+          },       
+          data: function(param){
+          }
+        },    
+        "columns": [
+          {
+            "class":"centered","width":"50px","data": function(row,type,val,meta){
+              btn='<center><a data-id="'+row.hash_vac+'"  class="btn_edit_actividad"><i class="fa fa-edit" ></i> </a>';
+              btn+='<a data-id="'+row.hash_vac+'"  class="btn_del_actividad"><i class="fa fa-trash" ></i> </a></center>';
+              return btn;
+            }
+          }, 
+          { "data": "actividad" ,"width":"40%","class":"margen-td centered"},
+          { "data": "tipo" ,"width":"40%","class":"margen-td centered"},
+          { "data": "unidad" ,"width":"10%","class":"margen-td centered"},
+          { "data": "rango" ,"width":"10%","class":"margen-td centered"},
+          { "data": "estado" ,"width":"10%","class":"margen-td centered"},
+        ]
+      }); 
+
+
+      setTimeout( function () {
+        var tabla_actividades = $.fn.dataTable.fnTables(true);
+        if ( tabla_actividades.length > 0 ) {
+            $(tabla_actividades).dataTable().fnAdjustColumnSizing();
+      }}, 100 ); 
+
+      setTimeout( function () {
+        var tabla_actividades = $.fn.dataTable.fnTables(true);
+        if ( tabla_actividades.length > 0 ) {
+            $(tabla_actividades).dataTable().fnAdjustColumnSizing();
+      }}, 1100 ); 
+            
+      $(document).off('click', '#mantenedor_actividades').on('click', '#mantenedor_actividades',function(event) {
+        $('#modal_nuevo_actividad').modal('toggle'); 
+        $(".btn_ingresa_actividad").html('<i class="fa fa-save"></i> Guardar');
+        $(".btn_ingresa_actividad").attr("disabled", false);
+        $(".cierra_mod_modelos").attr("disabled", false);
+        $('#formActividad')[0].reset();
+        $("#hash_actividad").val("");
+        tabla_actividades.ajax.reload();
+      });     
+      
+      $(document).off('submit', '#formActividad').on('submit', '#formActividad',function(event) {
+        var url="<?php echo base_url()?>";
+        var formElement = document.querySelector("#formActividad");
+        var formData = new FormData(formElement);
+          $.ajax({
+              url: $('#formActividad').attr('action')+"?"+$.now(),  
+              type: 'POST',
+              data: formData,
+              cache: false,
+              processData: false,
+              dataType: "json",
+              contentType : false,
+              beforeSend:function(){
+                /* $(".btn_ingresa_actividad").attr("disabled", true);
+                $(".cierra_mod_modelos").attr("disabled", true); */
+              },
+              success: function (data) {
+                $(".btn_ingresa_actividad").attr("disabled", false);
+                $(".cierra_mod_modelos").attr("disabled", false);   
+
+                if(data.res == "error"){
+              
+                    $.notify(data.msg, {
+                      className:'error',
+                      globalPosition: 'top right',
+                      autoHideDelay:10000,
+                    });
+                }else if(data.res == "ok"){
+                    $.notify(data.msg, {
+                      className:'success',
+                      globalPosition: 'top right',
+                      autoHideDelay:2000,
+                    });
+                    $(".btn_ingresa_actividad").html('<i class="fa fa-save"></i> Guardar');
+                    $("#hash_actividad").val("");
+
+                    setTimeout(function(){ 
+                      $('#formActividad')[0].reset();
+                      tabla_actividades.ajax.reload();
+                    } ,2000);  
+                }
+              }
+          });
+          return false; 
+      });
+
+      $(document).off('click', '.btn_del_actividad').on('click', '.btn_del_actividad',function(event) {
+        hash=$(this).attr("data-id");
+        if(confirm("¿Esta seguro que desea cambiar el estado?")){
+          $.post('eliminarActividad'+"?"+$.now(), {hash : hash} ,function(data) {
+            if(data.res=="ok"){
+              $.notify(data.msg, {
+                className:'success',
+                globalPosition: 'top right'
+              });
+            tabla_actividades.ajax.reload();
+            }else{
+              $.notify(data.msg, {
+                className:'danger',
+                globalPosition: 'top right'
+              });
+            }
+          },"json");
+        }
+      });
+
+
+      $(document).off('click', '.btn_edit_actividad').on('click', '.btn_edit_actividad',function(event) {
+         $("#hash_actividad").val("");
+         hash=$(this).attr("data-id");
+         $(".btn_ingresa_actividad").html('<i class="fa fa-edit"></i> Modificar');
+         $('#formActividad')[0].reset();
+         $("#hash_actividad").val("");
+         $("#formActividad input,#formActividad select,#formActividad button,#formActividad").prop("disabled", true);
+
+          $.ajax({
+            url: "getDataActividad"+"?"+$.now(),  
+            type: 'POST',
+            cache: false,
+            tryCount : 0,
+            retryLimit : 3,
+            data:{hash:hash},
+            dataType:"json",
+            beforeSend:function(){
+            /*  $(".btn_ingresa_actividad").prop("disabled",true); 
+             $(".cierra_mod_modelos").prop("disabled",true);  */
+            },
+            success: function (data) {
+              if(data.res=="ok"){
+                for(dato in data.datos){
+                  $("#hash_actividad").val(data.datos[dato].hash_vac);
+                  $("#actividad").val(data.datos[dato].actividad);
+                  $("#tipo").val(data.datos[dato].tipo);
+                  $("#unidad option[value='"+data.datos[dato].unidad+"'").prop("selected", true);
+                  $("#rango").val(data.datos[dato].rango);
+                }
+                $("#formActividad input,#formActividad select,#formActividad button,#formActividad").prop("disabled", false);
+                $(".cierra_mod_modelos").prop("disabled", false);
+                $(".btn_ingresa_actividad").prop("disabled", false);   
+               
+              }
+            },
+            error : function(xhr, textStatus, errorThrown ) {
+              if (textStatus == 'timeout') {
+                  this.tryCount++;
+                  if (this.tryCount <= this.retryLimit) {
+                      $.notify("Reintentando...", {
+                        className:'info',
+                        globalPosition: 'top right'
+                      });
+                      $.ajax(this);
+                      return;
+                  } else{
+                     $.notify("Problemas en el servidor, intente nuevamente.", {
+                        className:'warn',
+                        globalPosition: 'top right'
+                      });     
+                      $('#modal_nuevo_actividad').modal("toggle");
+                  }    
+                  return;
+              }
+
+              if (xhr.status == 500) {
+                  $.notify("Problemas en el servidor, intente más tarde.", {
+                    className:'warn',
+                    globalPosition: 'top right'
+                  });
+                  $('#modal_nuevo_actividad').modal("toggle");
+              }
+          },timeout:5000
+        }); 
+      });
   
-  /*********MANTENCIONES*****/
 
 
 
@@ -815,6 +1301,8 @@
             <i class="fa fa-table fa-1x"></i><span class="sr-only"></span> Mantenedores
           </button>
           <div class="dropdown-menu">
+            <a class="dropdown-item" href="#" id="mantenedor_mat">Asignacion Actividades a tipos</a>
+            <a class="dropdown-item" href="#" id="mantenedor_actividades">Actividades mantenciones</a>
             <a class="dropdown-item" href="#" id="mantenedor_mmc">Tipo/marca/modelo/comb</a>
             <a class="dropdown-item" href="#" id="mantenedor_marcas">Marcas</a>
             <a class="dropdown-item" href="#" id="mantenedor_modelos">Modelos</a>
@@ -828,9 +1316,251 @@
 <!-- LISTADO -->
 ASDAS
 
-<!--MMC-->
+<!-- ACTIVIDADES ASIGNACION TIPOS -->
 
-  <div id="modal_mmc" class="modal fade"  data-backdrop="static" tabindex="-1"  aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
+  <div id="modal_mat" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal_mat">
+      <div class="modal-content">
+        <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+        
+          <fieldset class="form-ing-cont">
+            <legend class="form-ing-border">Formulario de asignación de actividades de mantenciones</legend>
+            <?php echo form_open_multipart("formMat",array("id"=>"formMat","class"=>"formMat"))?>
+            <input type="hidden" name="hash_mat" id="hash_mat">
+            <div class="form-row">  
+
+      
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label for="tipo_mat" class="col-sm-12 col-form-label col-form-label-sm">Tipo</label>
+                  <select id="tipo_mat" name="tipo_mat" style="width:100%!important;">
+                 <!--  <option>Seleccione tipo</option> -->
+                  </select>
+                </div>
+              </div>
+
+              <div class="col-lg-1">  
+                <div class="form-group">
+                  <label for="desde_mat" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
+                    <select name="desde_mat" id="desde_mat" class="form-control form-control-sm">
+                        <?php
+                        $anio_actual = date("Y");
+
+                        // Genera opciones desde el año 2000 hasta el año actual
+                        for ($anio = 2000; $anio <= $anio_actual; $anio++) {
+                            echo "<option value='$anio'>$anio</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-lg-1">  
+                <div class="form-group">
+                  <label for="desde_mat" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
+                    <select name="hasta_mat" id="hasta_mat" class="form-control form-control-sm">
+                        <?php
+                        $anio_actual = date("Y");
+
+                        // Genera opciones desde el año 2000 hasta el año actual
+                        for ($anio = 2000; $anio <= $anio_actual; $anio++) {
+                            echo "<option value='$anio'>$anio</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-lg-3">  
+                <div class="form-group">
+                  <label for="actividad_mat" class="col-sm-12 col-form-label col-form-label-sm">Actividad</label>
+                  <select id="actividad_mat" name="actividad_mat" class="custom-select custom-select-sm">
+                    <option value="" selected>Seleccione</option>
+                    <?php foreach ($actividades as $act) { ?>
+                      <option value="<?php echo $act["id"]; ?>"><?php echo $act["actividad"]; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div> 
+
+             <!--  <div class="col-lg-1">  
+                <div class="form-group">
+                  <label for="unidad_mat" class="col-sm-12 col-form-label col-form-label-sm">Unidad</label>
+                      <select  name="unidad_mat" id="unidad_mat" class="unidad_mat custom-select custom-select-sm">
+                      <option  value="km" selected>km</option>
+                      <option  value="vencimiento">Venc.</option>
+                      <option  value="correctivo">Correctivo</option>
+                    </select>
+                </div>
+              </div>  -->
+
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label for="rango_mat" class="col-sm-12 col-form-label col-form-label-sm">Rango</label>
+                  <input placeholder="rango" type="text" size="8" maxlength="8" name="rango_mat" id="rango_mat" class="form-control form-control-sm" autocomplete="off" />
+                </div>
+              </div>
+ 
+              <div class="col-lg-1">  
+                <div class="form-group">
+                  <label for="estado_mat" class="col-sm-12 col-form-label col-form-label-sm">Estado</label>
+                      <select  name="estado_mat" id="estado_mat" class="custom-select custom-select-sm">
+                      <option  value="activo" selected>Activo</option>
+                      <option  value="noactivo">No activo</option>
+                    </select>
+                </div>
+              </div> 
+
+            </div>
+
+            <div class="col-lg-4 offset-lg-4 mt-2">
+              <div class="form-row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <button type="submit" class="btn-block btn btn-sm btn-primary btn_ingresa_mact">
+                      <i class="fa fa-plus-circle"></i> Guardar
+                    </button>
+                  </div>
+                </div>
+              </div> 
+            </div>  
+
+            <?php echo form_close(); ?>
+          </fieldset>
+
+          <fieldset class="form-ing-cont">
+          <legend class="form-ing-border">Listado de asignación de actividades de mantenciones</legend>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <table id="tabla_mat" class="table table-striped table-hover table-bordered dt-responsive nowrap" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th class="centered">Acciones</th>
+                      <th class="centered">Tipo</th>  
+                      <th class="centered">Desde-hasta</th>
+                      <th class="centered">Actividad </th>  
+                      <th class="centered">Unidad </th>  
+                      <th class="centered">Rango (Cada) </th>  
+                      <th class="centered">Estado  </th>  
+
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+
+
+<!-- ACTIVIDADES -->
+  <div id="modal_nuevo_actividad" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
+    <div class="modal-dialog modal_nuevo_actividad">
+      <div class="modal-content">
+        <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>
+        
+          <fieldset class="form-ing-cont">
+            <legend class="form-ing-border">Formulario de actividades de mantenciones</legend>
+            <?php echo form_open_multipart("formActividad",array("id"=>"formActividad","class"=>"formActividad"))?>
+            <input type="hidden" name="hash_actividad" id="hash_actividad">
+            <div class="form-row">  
+
+              <div class="col-lg-4">
+                <div class="form-group">
+                  <label for="actividad" class="col-sm-12 col-form-label col-form-label-sm">Actividad</label>
+                  <input placeholder="Actividad" type="text" name="actividad" id="actividad" class="form-control form-control-sm" autocomplete="off" />
+                </div>
+              </div>
+
+              <div class="col-lg-2">  
+                <div class="form-group">
+                  <label for="tipo_a" class="col-sm-12 col-form-label col-form-label-sm">Tipo</label>
+                      <select  name="tipo_a" id="tipo_a" class="tipo_a custom-select custom-select-sm">
+                      <option  value="automatico" selected>Automatico</option>
+                      <option  value="manual">Manual</option>
+                    </select>
+                </div>
+              </div> 
+
+              <div class="col-lg-2">  
+                <div class="form-group">
+                  <label for="unidad" class="col-sm-12 col-form-label col-form-label-sm">Unidad</label>
+                      <select  name="unidad" id="unidad" class="unidad custom-select custom-select-sm">
+                      <option  value="km" selected>km</option>
+                      <option  value="vencimiento">Venc.</option>
+                      <option  value="correctivo">Correctivo</option>
+                    </select>
+                </div>
+              </div> 
+
+              <div class="col-lg-2">
+                <div class="form-group">
+                  <label for="rango" class="col-sm-12 col-form-label col-form-label-sm">Rango</label>
+                  <input placeholder="rango" type="text" name="rango" id="rango" class="form-control form-control-sm" autocomplete="off" />
+                </div>
+              </div>
+
+              <div class="col-lg-2">  
+                <div class="form-group">
+                  <label for="estado_a" class="col-sm-12 col-form-label col-form-label-sm">Estado</label>
+                      <select  name="estado_a" id="estado_a" class="estado_a custom-select custom-select-sm">
+                      <option  value="activo" selected>Activo</option>
+                      <option  value="noactivo">No activo</option>
+                    </select>
+                </div>
+              </div> 
+
+            </div>
+
+            <div class="col-lg-4 offset-lg-4 mt-2">
+              <div class="form-row">
+                <div class="col-12">
+                  <div class="form-group">
+                    <button type="submit" class="btn-block btn btn-sm btn-primary btn_ingresa_actividad">
+                      <i class="fa fa-plus-circle"></i> Guardar
+                    </button>
+                  </div>
+                </div>
+              </div> 
+            </div>  
+
+            <?php echo form_close(); ?>
+          </fieldset>
+
+          <fieldset class="form-ing-cont">
+          <legend class="form-ing-border">Listado de actividades de mantenciones</legend>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <table id="tabla_actividades" class="table table-striped table-hover table-bordered dt-responsive nowrap" style="width:100%">
+                  <thead>
+                    <tr>
+                      <th class="centered">Acciones</th>
+                      <th class="centered">Actividad de mantención</th>  
+                      <th class="centered">Tipo </th>  
+                      <th class="centered">Unidad </th>  
+                      <th class="centered">Rango (Cada) </th>  
+                      <th class="centered">Estado</th>  
+                    </tr>
+                  </thead>
+                </table>
+              </div>
+            </div>
+          </fieldset>
+
+        </div>
+      </div>
+    </div>
+
+
+
+
+<!-- MMC-->
+
+  <div id="modal_mmc" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal_mmc">
       <div class="modal-content">
         <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>
@@ -934,7 +1664,7 @@ ASDAS
   
 <!-- MARCAS -->
 
-  <div id="modal_nuevo_marcas" class="modal fade"  data-backdrop="static" tabindex="-1"  aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
+  <div id="modal_nuevo_marcas" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
     <div class="modal-dialog modal_nuevo_marcas">
     <div class="modal-content">
       <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>
@@ -1002,7 +1732,7 @@ ASDAS
 
 
 <!-- MODELOS -->
- <div id="modal_nuevo_modelos" class="modal fade"  data-backdrop="static" tabindex="-1"  aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
+ <div id="modal_nuevo_modelos" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
   <div class="modal-dialog modal_nuevo_modelos">
     <div class="modal-content">
       <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>

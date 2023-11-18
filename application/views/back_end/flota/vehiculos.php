@@ -115,7 +115,7 @@
           { "data": "conductor_actual", "class": "margen-td centered" },
           { "data": "patente", "class": "margen-td centered" },
           { "data": "kilometraje", "class": "margen-td centered" },
-          { "data": "tipo", "class": "margen-td centered" },
+          /* { "data": "tipo", "class": "margen-td centered" }, */
           { "data": "anio", "class": "margen-td centered" },
           { "data": "color", "class": "margen-td centered" },
           { "data": "tipo_mantenimiento", "class": "margen-td centered" },
@@ -472,7 +472,7 @@
             <th class="centered">Cond.actual -nombre</th>
             <th class="centered">Patente</th>
             <th class="centered">Kilometraje</th>
-            <th class="centered">Tipo/Marca/modelo/Comb</th>
+            <!-- <th class="centered">Tipo/Marca/modelo/Comb</th> -->
             <th class="centered">Año</th>
             <th class="centered">Color</th>
             <th class="centered">Tipo manten.</th>
@@ -605,9 +605,9 @@
                   <label for="estado" class="col-sm-12 col-form-label col-form-label-sm">Tipo mantenimiento</label>
                   <select id="tipo_mantenimiento" name="tipo_mantenimiento" class="custom-select custom-select-sm">
                     <option value="" selected>Seleccione</option>
-                  <!--   <?php foreach ($tipos_mantenimiento as $t) { ?>
-                      <option value="<?php echo $t["id"]; ?>"><?php echo $t["tipo_mantenimiento"]; ?></option>
-                    <?php } ?> -->
+                    <?php foreach ($tipos_mantenimiento as $t) { ?>
+                      <option value="<?php echo $t["id"]; ?>"><?php echo $t["tipo_mmc"]; ?></option>
+                    <?php } ?>
                   </select>
                 </div>
               </div>

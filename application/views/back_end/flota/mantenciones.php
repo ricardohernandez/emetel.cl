@@ -32,7 +32,7 @@
 
   @media (min-width: 768px){
     .modal_mmc{
-      width: 55%!important;
+      width: 65%!important;
     }
     .modal_nuevo_modelos{
       width: 55%!important;
@@ -74,6 +74,7 @@
       "bInfo": false,
       "bProcessing": false,
       "pagingType": false , 
+      "searching": true , 
       //"responsive":true,
       // "scrollY": 220,
       // "scrollX": true,
@@ -111,6 +112,7 @@
               return json;
           },       
           data: function(param){
+            param.tipo = $(".tipo_mat").val()
           }
         },    
         "columns": [
@@ -122,7 +124,6 @@
             }
           }, 
           { "data": "tipo" ,"width":"40%","class":"margen-td centered"},
-          { "data": "fechas" ,"width":"10%","class":"margen-td centered"},
           { "data": "actividad" ,"width":"40%","class":"margen-td centered"},
           { "data": "unidad" ,"width":"10%","class":"margen-td centered"},
           { "data": "rango" ,"width":"10%","class":"margen-td centered"},
@@ -153,21 +154,38 @@
             width: '100%',    
             allowClear: true
           });
-          $('#tipo_mat').val(null).trigger('change.select2');
+
+          $(".tipo_mat").select2({
+            placeholder: 'Seleccione tipo mantenimiento',
+            data: response,
+            width: '100%',    
+            allowClear: true
+          });
+
+          $('#tipo_mat,.tipo_mat').val(null).trigger('change.select2');
 
         });
       }
+
+      $(document).off('change', '.tipo_mat').on('change', '.tipo_mat',function(event) {
+        tabla_mat.ajax.reload();
+      })
+
+      $(document).on('keyup paste', '#buscador_mat', function() {
+        tabla_mat.search($(this).val().trim()).draw();
+      });
+
+ 
       
-      $(document).off('click', '#mantenedor_mat').on('click', '#mantenedor_mat',function(event) {
-        $('#modal_mat').modal('toggle'); 
+      init()
+      async function init(){
         $(".btn_ingresa_mat").html('<i class="fa fa-save"></i> Guardar');
         $(".btn_ingresa_mat").attr("disabled", false);
         $('#formMat')[0].reset();
         $("#hash_mat").val("");
         tabla_mat.ajax.reload();
         cargaTipoMat()
-
-      });     
+      }   
       
       $(document).off('submit', '#formMat').on('submit', '#formMat',function(event) {
         var url="<?php echo base_url()?>";
@@ -237,7 +255,6 @@
         }
       });
 
-
       $(document).off('click', '.btn_edit_mat').on('click', '.btn_edit_mat',function(event) {
          $("#hash_mat").val("");
          hash=$(this).attr("data-id");
@@ -267,8 +284,7 @@
                   $("#estado_mat option[value='"+data.datos[dato].estado+"'").prop("selected", true);
                   $("#unidad_mat").val(data.datos[dato].unidad);
                   $("#rango_mat").val(data.datos[dato].rango);
-                  $("#desde_mat option[value='"+data.datos[dato].desde+"'").prop("selected", true);
-                  $("#hasta_mat option[value='"+data.datos[dato].hasta+"'").prop("selected", true);
+           
                 }
                 $("#formMat input,#formMat select,#formMat button,#formMat").prop("disabled", false);
                 $(".cierra_mod_modelos").prop("disabled", false);
@@ -573,6 +589,7 @@
         { "data": "marca", "class": "margen-td centered" },
         { "data": "modelo", "class": "margen-td centered" },
         { "data": "combustible", "class": "margen-td centered" },
+        { "data": "fechas", "class": "margen-td centered" },
         { "data": "ultima_actualizacion", "class": "margen-td centered" },
       ]
     }); 
@@ -592,7 +609,7 @@
         return this.charAt(0).toUpperCase() + this.slice(1);
     }
  
-    function ajustarColumnas() {
+    async function ajustarColumnas() {
       function ajustarTabla(nombreTabla) {
         var tablas = $.fn.dataTable.fnTables(true);
         var tabla = $(tablas).filter(function() {
@@ -603,7 +620,7 @@
           tabla.dataTable().fnAdjustColumnSizing();
         }
       }
-      const tablasAjustar = ['listammc'];
+      const tablasAjustar = ['listammc','tabla_mat','tabla_actividades','tabla_marcas','tabla_modelos'];
 
       tablasAjustar.forEach(nombreTabla => {
         setTimeout(() => {
@@ -614,7 +631,8 @@
       tablasAjustar.forEach(nombreTabla => {
         setTimeout(() => {
           ajustarTabla(nombreTabla);
-        }, 3000);
+          console.log("tablasAjustar");
+        }, 2000);
       });
     }
 
@@ -627,6 +645,13 @@
       $('#formMmc')[0].reset();
       $("#hash_mmc").val("");
       listammc.ajax.reload();
+
+      setTimeout( function () {
+        var listammc = $.fn.dataTable.fnTables(true);
+        if ( listammc.length > 0 ) {
+            $(listammc).dataTable().fnAdjustColumnSizing();
+      }}, 200 ); 
+
     });     
     
     $(document).off('click', '.btn_nuevo_mmc').on('click', '.btn_nuevo_mmc',function(event) {
@@ -725,7 +750,8 @@
               $("#marca  option[value='"+data.datos[dato].id_marca+"'").prop("selected", true);
               $("#modelo  option[value='"+data.datos[dato].id_modelo+"'").prop("selected", true);
               $("#combustible  option[value='"+data.datos[dato].id_combustible+"'").prop("selected", true);
- 
+              $("#desde_mcc option[value='"+data.datos[dato].desde+"'").prop("selected", true);
+              $("#hasta_mcc option[value='"+data.datos[dato].hasta+"'").prop("selected", true);
             } 
           }
  
@@ -1261,199 +1287,153 @@
   })
  
 </script>
+   
 
-<!-- FILTROS -->
-  
+<!-- FORM -->
+
   <div class="form-row">
+    <fieldset class="form-ing-cont" style="width: 100%;">
+    <legend class="form-ing-border">Formulario Asignación de actividades a mantenciones</legend>
+      <?php echo form_open_multipart("formMat",array("id"=>"formMat","class"=>"formMat"))?>
+      <input type="hidden" name="hash_mat" id="hash_mat">
+      
+      <div class="form-row">  
 
-    <!-- <div class="col-xs-6 col-sm-6 col-md-1 col-lg-1 no-padding">  
-       <input type="file" id="userfile" name="userfile" class="file_cs" style="display:none;" />
-       <button type="button" class="allwidth btn btn-danger btn-sm btn_file_cs" value="" onclick="document.getElementById('userfile').click();">
-       <span class="glyphicon glyphicon-folder-open" style="margin-right:5px!important;"></span> CSV</button>
-    </div> -->
+        <div class="col-lg-4">
+          <div class="form-group">
+            <label for="tipo_mat" class="col-sm-12 col-form-label col-form-label-sm">Tipo</label>
+            <select id="tipo_mat" name="tipo_mat" style="width:100%!important;">
+            <!--  <option>Seleccione tipo</option> -->
+            </select>
+          </div>
+        </div>
 
-    <!-- <div class="col-6 col-lg-1">  
-      <div class="form-group">
-         <button type="button" class="btn btn-block btn-sm btn-primary btn_nuevo_mmc btn_xr3">
-         <i class="fa fa-plus-circle"></i>  Crear 
-         </button>
-      </div>
-    </div> -->
+        <div class="col-lg-2">  
+          <div class="form-group">
+            <label for="actividad_mat" class="col-sm-12 col-form-label col-form-label-sm">Actividad</label>
+            <select id="actividad_mat" name="actividad_mat" class="custom-select custom-select-sm">
+              <option value="" selected>Seleccione</option>
+              <?php foreach ($actividades as $act) { ?>
+                <option value="<?php echo $act["id"]; ?>"><?php echo $act["actividad"]; ?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div> 
 
-    <div class="col-6 col-lg-3">  
-     <div class="form-group">
-      <input type="text" placeholder="Busqueda" id="buscador_mmc" class="buscador_mmc form-control form-control-sm">
-     </div>
-    </div>
+        <div class="col-lg-2">
+          <div class="form-group">
+            <label for="rango_mat" class="col-sm-12 col-form-label col-form-label-sm">Rango</label>
+            <input placeholder="rango" type="text" size="8" maxlength="8" name="rango_mat" id="rango_mat" class="form-control form-control-sm" autocomplete="off" />
+          </div>
+        </div>
 
-    <div class="col-6 col-lg-1">
-      <div class="form-group">
-       <button type="button" class="btn-block btn btn-sm btn-primary btn_filtro_mmc btn_xr3">
-       <i class="fa fa-cog fa-1x"></i><span class="sr-only"></span> Filtrar
-       </button>
-     </div>
-    </div>
+        <div class="col-lg-2">  
+          <div class="form-group">
+            <label for="estado_mat" class="col-sm-12 col-form-label col-form-label-sm">Estado</label>
+                <select  name="estado_mat" id="estado_mat" class="custom-select custom-select-sm">
+                <option  value="activo" selected>Activo</option>
+                <option  value="noactivo">No activo</option>
+              </select>
+          </div>
+        </div> 
 
-    <div class="col-6 col-lg-2">
-      <div class="form-group">
-        <div class="btn-group">
-          <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <i class="fa fa-table fa-1x"></i><span class="sr-only"></span> Mantenedores
+        <div class="col-lg-2">
+            <div class="col-12">
+              <div class="form-group">
+              <label for="estado_mat" class="col-sm-12 col-form-label col-form-label-sm">&nbsp;</label>
+                <button type="submit" class="btn-block btn btn-sm btn-primary btn_ingresa_mact">
+                  <i class="fa fa-plus-circle"></i> Guardar
+                </button>
+              </div>
+            </div>
+        </div>  
+
+        </div>  
+
+      <?php echo form_close(); ?>
+    </fieldset>
+  </div>
+
+<!-- GRILLA -->
+  
+  <div class="form-row mt-4">
+    <fieldset class="form-ing-cont" style="width: 100%;">
+    <legend class="form-ing-border">Listado de actividades de mantenciones</legend>
+
+    <div class="form-row">
+      <!-- <div class="col-xs-6 col-sm-6 col-md-1 col-lg-1 no-padding">  
+        <input type="file" id="userfile" name="userfile" class="file_cs" style="display:none;" />
+        <button type="button" class="allwidth btn btn-danger btn-sm btn_file_cs" value="" onclick="document.getElementById('userfile').click();">
+        <span class="glyphicon glyphicon-folder-open" style="margin-right:5px!important;"></span> CSV</button>
+      </div> -->
+
+      <!-- <div class="col-6 col-lg-1">  
+        <div class="form-group">
+          <button type="button" class="btn btn-block btn-sm btn-primary btn_nuevo_mmc btn_xr3">
+          <i class="fa fa-plus-circle"></i>  Crear 
           </button>
-          <div class="dropdown-menu">
-            <a class="dropdown-item" href="#" id="mantenedor_mat">Asignacion Actividades a tipos</a>
-            <a class="dropdown-item" href="#" id="mantenedor_actividades">Actividades mantenciones</a>
-            <a class="dropdown-item" href="#" id="mantenedor_mmc">Tipo/marca/modelo/comb</a>
-            <a class="dropdown-item" href="#" id="mantenedor_marcas">Marcas</a>
-            <a class="dropdown-item" href="#" id="mantenedor_modelos">Modelos</a>
+        </div>
+      </div> -->
+
+      <div class="col-lg-4">
+        <div class="form-group">
+          <select id="tipo_mat" name="tipo_mat" class="tipo_mat" style="width:100%!important;">
+          <!--  <option>Seleccione tipo</option> -->
+          </select>
+        </div>
+      </div>
+
+
+
+      <div class="col-6 col-lg-3">  
+      <div class="form-group">
+        <input type="text" placeholder="Busqueda" id="buscador_mat" class="buscador_mat form-control form-control-sm">
+      </div>
+      </div>
+
+      <!-- <div class="col-6 col-lg-1">
+        <div class="form-group">
+        <button type="button" class="btn-block btn btn-sm btn-primary btn_filtro_mmc btn_xr3">
+        <i class="fa fa-cog fa-1x"></i><span class="sr-only"></span> Filtrar
+        </button>
+      </div>
+      </div>
+ -->
+      <div class="col-6 col-lg-2">
+        <div class="form-group">
+          <div class="btn-group">
+            <button type="button" class="btn btn-sm btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <i class="fa fa-table fa-1x"></i><span class="sr-only"></span> Mantenedores
+            </button>
+            <div class="dropdown-menu">
+              <a class="dropdown-item" href="#" id="mantenedor_actividades">Actividades mantenciones</a>
+              <a class="dropdown-item" href="#" id="mantenedor_mmc">Tipo/marca/modelo/comb</a>
+              <a class="dropdown-item" href="#" id="mantenedor_marcas">Marcas</a>
+              <a class="dropdown-item" href="#" id="mantenedor_modelos">Modelos</a>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    
-  </div>            
+    </div>         
 
-<!-- LISTADO -->
-ASDAS
-
-<!-- ACTIVIDADES ASIGNACION TIPOS -->
-
-  <div id="modal_mat" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
-    <div class="modal-dialog modal_mat">
-      <div class="modal-content">
-        <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>
-        
-          <fieldset class="form-ing-cont">
-            <legend class="form-ing-border">Formulario de asignación de actividades de mantenciones</legend>
-            <?php echo form_open_multipart("formMat",array("id"=>"formMat","class"=>"formMat"))?>
-            <input type="hidden" name="hash_mat" id="hash_mat">
-            <div class="form-row">  
-
-      
-              <div class="col-lg-4">
-                <div class="form-group">
-                  <label for="tipo_mat" class="col-sm-12 col-form-label col-form-label-sm">Tipo</label>
-                  <select id="tipo_mat" name="tipo_mat" style="width:100%!important;">
-                 <!--  <option>Seleccione tipo</option> -->
-                  </select>
-                </div>
-              </div>
-
-              <div class="col-lg-1">  
-                <div class="form-group">
-                  <label for="desde_mat" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
-                    <select name="desde_mat" id="desde_mat" class="form-control form-control-sm">
-                        <?php
-                        $anio_actual = date("Y");
-
-                        // Genera opciones desde el año 2000 hasta el año actual
-                        for ($anio = 2000; $anio <= $anio_actual; $anio++) {
-                            echo "<option value='$anio'>$anio</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-              </div>
-
-              <div class="col-lg-1">  
-                <div class="form-group">
-                  <label for="desde_mat" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
-                    <select name="hasta_mat" id="hasta_mat" class="form-control form-control-sm">
-                        <?php
-                        $anio_actual = date("Y");
-
-                        // Genera opciones desde el año 2000 hasta el año actual
-                        for ($anio = 2000; $anio <= $anio_actual; $anio++) {
-                            echo "<option value='$anio'>$anio</option>";
-                        }
-                        ?>
-                    </select>
-                </div>
-              </div>
-
-              <div class="col-lg-3">  
-                <div class="form-group">
-                  <label for="actividad_mat" class="col-sm-12 col-form-label col-form-label-sm">Actividad</label>
-                  <select id="actividad_mat" name="actividad_mat" class="custom-select custom-select-sm">
-                    <option value="" selected>Seleccione</option>
-                    <?php foreach ($actividades as $act) { ?>
-                      <option value="<?php echo $act["id"]; ?>"><?php echo $act["actividad"]; ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div> 
-
-             <!--  <div class="col-lg-1">  
-                <div class="form-group">
-                  <label for="unidad_mat" class="col-sm-12 col-form-label col-form-label-sm">Unidad</label>
-                      <select  name="unidad_mat" id="unidad_mat" class="unidad_mat custom-select custom-select-sm">
-                      <option  value="km" selected>km</option>
-                      <option  value="vencimiento">Venc.</option>
-                      <option  value="correctivo">Correctivo</option>
-                    </select>
-                </div>
-              </div>  -->
-
-              <div class="col-lg-2">
-                <div class="form-group">
-                  <label for="rango_mat" class="col-sm-12 col-form-label col-form-label-sm">Rango</label>
-                  <input placeholder="rango" type="text" size="8" maxlength="8" name="rango_mat" id="rango_mat" class="form-control form-control-sm" autocomplete="off" />
-                </div>
-              </div>
- 
-              <div class="col-lg-1">  
-                <div class="form-group">
-                  <label for="estado_mat" class="col-sm-12 col-form-label col-form-label-sm">Estado</label>
-                      <select  name="estado_mat" id="estado_mat" class="custom-select custom-select-sm">
-                      <option  value="activo" selected>Activo</option>
-                      <option  value="noactivo">No activo</option>
-                    </select>
-                </div>
-              </div> 
-
-            </div>
-
-            <div class="col-lg-4 offset-lg-4 mt-2">
-              <div class="form-row">
-                <div class="col-12">
-                  <div class="form-group">
-                    <button type="submit" class="btn-block btn btn-sm btn-primary btn_ingresa_mact">
-                      <i class="fa fa-plus-circle"></i> Guardar
-                    </button>
-                  </div>
-                </div>
-              </div> 
-            </div>  
-
-            <?php echo form_close(); ?>
-          </fieldset>
-
-          <fieldset class="form-ing-cont">
-          <legend class="form-ing-border">Listado de asignación de actividades de mantenciones</legend>
-
-            <div class="row">
-              <div class="col-lg-12">
-                <table id="tabla_mat" class="table table-striped table-hover table-bordered dt-responsive nowrap" style="width:100%">
-                  <thead>
-                    <tr>
-                      <th class="centered">Acciones</th>
-                      <th class="centered">Tipo</th>  
-                      <th class="centered">Desde-hasta</th>
-                      <th class="centered">Actividad </th>  
-                      <th class="centered">Unidad </th>  
-                      <th class="centered">Rango (Cada) </th>  
-                      <th class="centered">Estado  </th>  
-
-                    </tr>
-                  </thead>
-                </table>
-              </div>
-            </div>
-          </fieldset>
-
-        </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <table id="tabla_mat" class="table table-striped table-hover table-bordered dt-responsive nowrap" style="width:100%">
+          <thead>
+            <tr>
+              <th class="centered">Acciones</th>
+              <th class="centered">Tipo</th>  
+              <th class="centered">Actividad </th>  
+              <th class="centered">Unidad </th>  
+              <th class="centered">Rango (Cada) </th>  
+              <th class="centered">Estado  </th>  
+            </tr>
+          </thead>
+        </table>
       </div>
     </div>
+    </fieldset>
+  </div>
 
 
 <!-- ACTIVIDADES -->
@@ -1462,7 +1442,7 @@ ASDAS
       <div class="modal-content">
         <button type="button" title="Cerrar Ventana" class="close" data-dismiss="modal" aria-hidden="true">X</button>
         
-          <fieldset class="form-ing-cont">
+          <fieldset class="form-ing-cont" >
             <legend class="form-ing-border">Formulario de actividades de mantenciones</legend>
             <?php echo form_open_multipart("formActividad",array("id"=>"formActividad","class"=>"formActividad"))?>
             <input type="hidden" name="hash_actividad" id="hash_actividad">
@@ -1556,8 +1536,6 @@ ASDAS
     </div>
 
 
-
-
 <!-- MMC-->
 
   <div id="modal_mmc" class="modal fade"  data-backdrop="static" aria-labelledby="myModalLabel" role="dialog"  aria-hidden="true">
@@ -1571,7 +1549,7 @@ ASDAS
           <input type="hidden" name="hash_mmc" id="hash_mmc">
           <div class="form-row">  
 
-            <div class="col-lg-3">
+            <div class="col-lg-2">
               <div class="form-group">
                 <label for="tipo" class="col-sm-12 col-form-label col-form-label-sm">Tipo</label>
                 <select id="tipo" name="tipo" class="custom-select custom-select-sm">
@@ -1583,7 +1561,7 @@ ASDAS
               </div>
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-2">
               <div class="form-group">
                 <label for="marca" class="col-sm-12 col-form-label col-form-label-sm">Marca</label>
                 <select id="marca" name="marca" class="custom-select custom-select-sm">
@@ -1595,7 +1573,7 @@ ASDAS
               </div>
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-2">
               <div class="form-group">
                 <label for="modelo" class="col-sm-12 col-form-label col-form-label-sm">Modelos</label>
                 <select id="modelo" name="modelo" class="custom-select custom-select-sm">
@@ -1607,7 +1585,7 @@ ASDAS
               </div>
             </div>
 
-            <div class="col-lg-3">
+            <div class="col-lg-2">
               <div class="form-group">
                 <label for="combustible" class="col-sm-12 col-form-label col-form-label-sm">Combustible</label>
                 <select id="combustible" name="combustible" class="custom-select custom-select-sm">
@@ -1618,6 +1596,39 @@ ASDAS
                 </select>
               </div>
             </div>
+
+            <div class="col-lg-2">  
+                <div class="form-group">
+                  <label for="desde_mmc" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
+                    <select name="desde_mmc" id="desde_mmc" class="form-control form-control-sm">
+                        <?php
+                        $anio_actual = date("Y");
+
+                        // Genera opciones desde el año 2000 hasta el año actual
+                        for ($anio = 2000; $anio <= $anio_actual; $anio++) {
+                            echo "<option value='$anio'>$anio</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+              </div>
+
+              <div class="col-lg-2">  
+                <div class="form-group">
+                  <label for="hasta_mmc" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
+                    <select name="hasta_mmc" id="hasta_mmc" class="form-control form-control-sm">
+                        <?php
+                        $anio_actual = date("Y");
+
+                        // Genera opciones desde el año 2000 hasta el año actual
+                        for ($anio = 2000; $anio <= $anio_actual; $anio++) {
+                            echo "<option value='$anio'>$anio</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+              </div>
+
           </div>
 
           <div class="col-lg-4 offset-lg-4 mt-2">
@@ -1648,6 +1659,7 @@ ASDAS
                     <th class="centered">Marca</th>
                     <th class="centered">Modelo</th>
                     <th class="centered">Combustible</th>
+                    <th class="centered">Desde-hasta</th>
                     <th class="centered">&Uacute;ltima actualizaci&#243;n</th>
                   </tr>
                 </thead>

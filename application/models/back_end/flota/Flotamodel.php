@@ -25,7 +25,7 @@ class Flotamodel extends CI_Model {
 				ve.estado as estado,
 				vmb.motivo as motivo_baja,
 				up.plaza as sucursal,
-				'tipo_mantenimiento' as tipo_mantenimiento,
+				CONCAT_WS('-', vt.tipo, vma.marca, vmo.modelo, vc.combustible, vmmc.desde,vmmc.hasta) as tipo_mantenimiento,
 				CONCAT(SUBSTRING_INDEX(u.nombres, ' ', 1), ' ', SUBSTRING_INDEX(u.apellidos, ' ', 1)) AS conductor_anterior, 
 				CONCAT(SUBSTRING_INDEX(us.nombres, ' ', 1), ' ', SUBSTRING_INDEX(us.apellidos, ' ', 1)) AS conductor_actual, 
 				CONCAT(SUBSTRING_INDEX(us2.nombres, ' ', 1), ' ', SUBSTRING_INDEX(us2.apellidos, ' ', 1)) AS digitador, 
@@ -48,7 +48,7 @@ class Flotamodel extends CI_Model {
 				IF(v.equip_tag = 'on', 'si', 'no') AS equip_tag
 					
 			");
-			$this->db->join('vehiculos_tipos_mmc as vmmc', 'vmmc.id = v.id_tipo', 'left');
+			$this->db->join('vehiculos_tipos_mmc as vmmc', 'vmmc.id = v.id_tipo_mantenimiento', 'left');
 			$this->db->join('vehiculos_tipo as vt', 'vt.id = vmmc.id_tipo', 'left');
 			$this->db->join('vehiculos_marca as vma', 'vma.id = vmmc.id_marca', 'left');
 			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = vmmc.id_modelo', 'left');
@@ -192,9 +192,10 @@ class Flotamodel extends CI_Model {
 			}
 			return FALSE;
 		}
+		
 
-		public function listaTiposMMC(){
-			$this->db->select("mmc.id as id,CONCAT_WS('-', vt.tipo, vma.marca, vmo.modelo, vc.combustible) as tipo_mmc");
+		public function listaTiposMcc(){
+			$this->db->select("mmc.id as id,CONCAT_WS('-', vt.tipo, vma.marca, vmo.modelo, vc.combustible, mmc.desde,mmc.hasta) as tipo_mmc");
 			$this->db->join('vehiculos_tipo as vt', 'vt.id = mmc.id_tipo', 'left');
 			$this->db->join('vehiculos_marca as vma', 'vma.id = mmc.id_marca', 'left');
 			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = mmc.id_modelo', 'left');

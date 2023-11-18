@@ -75,15 +75,15 @@ class Mantenedores extends CI_Controller {
 				'actividades' => $actividades,
 			);
 
-			$this->load->view('back_end/flota/mantenedores/mantenciones',$datos);
+			$this->load->view('back_end/flota/mantenciones',$datos);
 		}
 	}
 
 
 		//ASIGNACION ACTIVIDADES
 			public function listaMat(){
-				$estado=$this->security->xss_clean(strip_tags($this->input->get_post("estado")));
-				echo json_encode($this->Mantenedoresmodel->listaMat($estado));
+				$tipo_mat=$this->security->xss_clean(strip_tags($this->input->get_post("tipo")));
+				echo json_encode($this->Mantenedoresmodel->listaMat($tipo_mat));
 			}
 
 			public function listaTiposMmc(){
@@ -99,8 +99,7 @@ class Mantenedores extends CI_Controller {
 					$unidad = $this->security->xss_clean(strip_tags($this->input->post("unidad_mat")));
 					$rango = $this->security->xss_clean(strip_tags($this->input->post("rango_mat")));
 					$estado = $this->security->xss_clean(strip_tags($this->input->post("estado_mat")));
-					$desde = $this->security->xss_clean(strip_tags($this->input->post("desde_mat")));
-					$hasta = $this->security->xss_clean(strip_tags($this->input->post("hasta_mat")));
+				
 					$ultima_actualizacion=date("Y-m-d G:i:s")." | ".$this->session->userdata("nombres")." ".$this->session->userdata("apellidos");
 
 					if ($this->form_validation->run("formMat") == FALSE){
@@ -113,8 +112,7 @@ class Mantenedores extends CI_Controller {
 							"unidad" => $unidad,
 							"rango" => $rango,
 							"estado" => $estado,
-							"desde" => $desde,
-							"hasta" => $hasta,
+						
 							"ultima_actualizacion" => $ultima_actualizacion,
 						);
 						
@@ -278,6 +276,8 @@ class Mantenedores extends CI_Controller {
 				$marca = $this->security->xss_clean(strip_tags($this->input->post("marca")));
 				$modelo = $this->security->xss_clean(strip_tags($this->input->post("modelo")));
 				$combustible = $this->security->xss_clean(strip_tags($this->input->post("combustible")));
+				$desde = $this->security->xss_clean(strip_tags($this->input->post("desde_mmc")));
+				$hasta = $this->security->xss_clean(strip_tags($this->input->post("hasta_mmc")));
 				$ultima_actualizacion=date("Y-m-d G:i:s")." | ".$this->session->userdata("nombres")." ".$this->session->userdata("apellidos");
 
 				if ($this->form_validation->run("formMmc") == FALSE){
@@ -289,6 +289,8 @@ class Mantenedores extends CI_Controller {
 						"id_marca" => $marca,
 						"id_modelo" => $modelo,
 						"id_combustible" => $combustible,
+						"desde" => $desde,
+						"hasta" => $hasta,
 						"ultima_actualizacion" => $ultima_actualizacion,
 					);
 					

@@ -49,26 +49,16 @@
      },
     });
 
-    $("#menu_mantenciones").addClass('disabled_sub');
+    $("#menu_ticket").addClass('disabled_sub');
     $(".contenedor_app").html("<center><i id='processingIcon' class='fa-solid fa-circle-notch fa-spin fa-2x'></i></center>");
     $(".menu_lista li").removeClass('menuActivo');       
-    $("#menu_mantenciones").addClass('menuActivo');  
+    $("#menu_ticket").addClass('menuActivo');  
 
-    $.get("vistaMantenciones", function( data ) {
+    $.get("vistaTicket", function( data ) {
       $(".contenedor_app").html(data);    
-      $("#menu_mantenciones").removeClass('disabled_sub');
+      $("#menu_ticket").removeClass('disabled_sub');
     });
 
-    /* $("#menu_responsables_fallos").addClass('disabled_sub');
-    $(".contenedor_app").html("<center><i id='processingIcon' class='fa-solid fa-circle-notch fa-spin fa-2x'></i></center>");
-    $(".menu_lista li").removeClass('menuActivo');    
-    $("#menu_responsables_fallos").addClass('menuActivo');  
-   
-
-    $.get("vistaResponsablesFallosHerramientas", function( data ) {
-      $(".contenedor_app").html(data);    
-      $("#menu_responsables_fallos").removeClass('disabled_sub');
-    });*/
 
     $(document).off('click', '#menu_vehiculos').on('click', '#menu_vehiculos',function(event) {
       event.preventDefault();
@@ -95,6 +85,20 @@
         $("#menu_mantenciones").removeClass('disabled_sub');
       });
     });
+
+    $(document).off('click', '#menu_ticket').on('click', '#menu_ticket',function(event) {
+      event.preventDefault();
+      $("#menu_ticket").addClass('disabled_sub');
+      $(".contenedor_app").html("<center><i id='processingIcon' class='fa-solid fa-circle-notch fa-spin fa-2x'></i></center>");
+      $(".menu_lista li").removeClass('menuActivo');       
+      $("#menu_ticket").addClass('menuActivo');  
+
+      $.get("vistaTicket", function( data ) {
+        $(".contenedor_app").html(data);    
+        $("#menu_ticket").removeClass('disabled_sub');
+      });
+    });
+
 
 
   })

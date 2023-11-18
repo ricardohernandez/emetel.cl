@@ -14,7 +14,7 @@ class Mantenedoresmodel extends CI_Model {
 	}
 
 	//ASIGNACION ACTIVIDADES
-		public function listaMat($estado){
+		public function listaMat($tipo_mat){
 			$this->db->select("sha1(mat.id) as hash_mat, 
 				mat.*,
 				vma.marca as marca,
@@ -23,8 +23,7 @@ class Mantenedoresmodel extends CI_Model {
 				vact.actividad as actividad,
 				vact.tipo as tipo,
 				vact.unidad as unidad,
-				CONCAT(mat.desde,' - ',mat.hasta) as  'fechas',
-				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible,' - ', tmmc.desde,' - ',tmmc.hasta) as  'tipo'
 
 			");
 
@@ -34,7 +33,11 @@ class Mantenedoresmodel extends CI_Model {
 			$this->db->join('vehiculos_modelo as vmo', 'vmo.id = tmmc.id_modelo', 'left');
 			$this->db->join('vehiculos_combustible as vc', 'vc.id = tmmc.id_combustible', 'left');
 			$this->db->join('vehiculos_mantenciones_actividades as vact', 'vact.id = mat.id_actividad', 'left');
-		
+			
+			if($tipo_mat!=""){
+				$this->db->where('mat.id_tipo_mmc', $tipo_mat);
+			}
+
 			$res=$this->db->get('vehiculos_mantenciones_tipos mat');
 			if($res->num_rows()>0){
 				return $res->result_array();
@@ -50,8 +53,7 @@ class Mantenedoresmodel extends CI_Model {
 				vmo.modelo as modelo,
 				vc.combustible as combustible,
 				vact.actividad as actividad,
-				CONCAT(mat.desde,' - ',mat.hasta) as  'fechas',
-				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+ 				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
 
 			");
 
@@ -185,6 +187,8 @@ class Mantenedoresmodel extends CI_Model {
 				vma.marca as marca,
 				vmo.modelo as modelo,
 				vc.combustible as combustible,
+				CONCAT(mmc.desde,' - ',mmc.hasta) as  'fechas',
+
 			");
 			$this->db->join('vehiculos_tipos_mmc as tmmc', 'tmmc.id = mmc.id_tipo', 'left');
 			$this->db->join('vehiculos_tipo as vt', 'vt.id = mmc.id_tipo', 'left');
@@ -212,6 +216,8 @@ class Mantenedoresmodel extends CI_Model {
 				vma.marca as marca,
 				vmo.modelo as modelo,
 				vc.combustible as combustible,
+				CONCAT(mmc.desde,' - ',mmc.hasta) as  'fechas',
+
 			");
 			$this->db->join('vehiculos_tipos_mmc as tmmc', 'tmmc.id = mmc.id_tipo', 'left');
 			$this->db->join('vehiculos_tipo as vt', 'vt.id = mmc.id_tipo', 'left');
@@ -423,7 +429,7 @@ class Mantenedoresmodel extends CI_Model {
 		public function listaTiposMMC(){
 			$this->db->select("
 				vtm.id as id,
-				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible,' - ', vtm.desde,' - ',vtm.hasta) as  'tipo'
 			");
 
  			$this->db->join('vehiculos_tipo as vt', 'vt.id = vtm.id_tipo', 'left');
@@ -439,7 +445,7 @@ class Mantenedoresmodel extends CI_Model {
 
 		public function listaTiposMmcS2(){
 			$this->db->select("vtm.id as id,
-				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible) as  'tipo'
+				CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible,' - ', vtm.desde,' - ',vtm.hasta) as  'tipo'
 			");
 	
 			$this->db->join('vehiculos_tipo as vt', 'vt.id = vtm.id_tipo', 'left');

@@ -93,17 +93,8 @@
 	$route['eliminarPrevencionModulos'] = "back_end/Prevencion_modulos/eliminar";
 
 	
-/******************TICKET*************************/
-
-	$route['ticket'] = "back_end/ticket/index";
-	$route['getTicketInicio'] = "back_end/ticket/getTicketInicio";
-	$route['getTicketList'] = "back_end/ticket/getTicketList";
-	$route['formTicket'] = "back_end/ticket/formTicket";
-	$route['eliminaTicket'] = "back_end/ticket/eliminaTicket";
-	$route['getDataTicket'] = "back_end/ticket/getDataTicket";
-
-	
-/*******MANTENEDORES*******/
+ 
+/*******Mantenedores*******/
 
 	$route['mantenedor_usuarios'] = "back_end/mantenedores/usuarios/index";
 	$route['vistaUsuarios'] = "back_end/mantenedores/usuarios/vistaUsuarios";
@@ -154,6 +145,17 @@
 	$route['formPerfiles'] = "back_end/mantenedores/usuarios/formPerfiles";
 	$route['eliminaPerfiles'] = "back_end/mantenedores/usuarios/eliminaPerfiles";
 
+
+	$route['vistaTicket'] = "back_end/flota/ticket/vistaTicket";
+	$route['listaTicket'] = "back_end/flota/ticket/listaTicket";
+	$route['formTicket'] = "back_end/flota/ticket/formTicket";
+	$route['eliminaTicket'] = "back_end/flota/ticket/eliminaTicket";
+	$route['getDataTicket'] = "back_end/flota/ticket/getDataTicket";
+	$route['listaActividadesMant'] = "back_end/flota/ticket/listaActividadesMant";
+	$route['listaPatentesMant'] = "back_end/flota/ticket/listaPatentesMant";
+	
+	
+
 /******************VEHICULOS*************************/
 
 	$route['flota'] = "back_end/flota/flota/index";
@@ -163,36 +165,36 @@
 	$route['getDataVehiculos'] = "back_end/flota/flota/getDataVehiculos";
 	$route['eliminaVehiculos'] = "back_end/flota/flota/eliminaVehiculos";
 
-	$route['vistaMantenciones'] = "back_end/flota/Mantenedores/vistaMantenciones";
-	$route['listaTiposMmc'] = "back_end/flota/Mantenedores/listaTiposMmc";
+	$route['vistaMantenciones'] = "back_end/flota/mantenedores/vistaMantenciones";
+	$route['listaTiposMmc'] = "back_end/flota/mantenedores/listaTiposMmc";
 	
 	
 
 
-	$route['listaMat'] = "back_end/flota/Mantenedores/listaMat";
-	$route['formMat'] = "back_end/flota/Mantenedores/formMat";
-	$route['getDataMat'] = "back_end/flota/Mantenedores/getDataMat";
-	$route['eliminarMat'] = "back_end/flota/Mantenedores/eliminarMat";
+	$route['listaMat'] = "back_end/flota/mantenedores/listaMat";
+	$route['formMat'] = "back_end/flota/mantenedores/formMat";
+	$route['getDataMat'] = "back_end/flota/mantenedores/getDataMat";
+	$route['eliminarMat'] = "back_end/flota/mantenedores/eliminarMat";
 	
-	$route['listaActividades'] = "back_end/flota/Mantenedores/listaActividades";
-	$route['formActividad'] = "back_end/flota/Mantenedores/formActividad";
-	$route['getDataActividad'] = "back_end/flota/Mantenedores/getDataActividad";
-	$route['eliminarActividad'] = "back_end/flota/Mantenedores/eliminarActividad";
+	$route['listaActividades'] = "back_end/flota/mantenedores/listaActividades";
+	$route['formActividad'] = "back_end/flota/mantenedores/formActividad";
+	$route['getDataActividad'] = "back_end/flota/mantenedores/getDataActividad";
+	$route['eliminarActividad'] = "back_end/flota/mantenedores/eliminarActividad";
 
-	$route['listaMmc'] = "back_end/flota/Mantenedores/listaMmc";
-	$route['formMmc'] = "back_end/flota/Mantenedores/formMmc";
-	$route['getDataMmc'] = "back_end/flota/Mantenedores/getDataMmc";
-	$route['eliminaMmc'] = "back_end/flota/Mantenedores/eliminaMmc";
+	$route['listaMmc'] = "back_end/flota/mantenedores/listaMmc";
+	$route['formMmc'] = "back_end/flota/mantenedores/formMmc";
+	$route['getDataMmc'] = "back_end/flota/mantenedores/getDataMmc";
+	$route['eliminaMmc'] = "back_end/flota/mantenedores/eliminaMmc";
 
-	$route['listaModelos'] = "back_end/flota/Mantenedores/listaModelos";
-	$route['formModelo'] = "back_end/flota/Mantenedores/formModelo";
-	$route['eliminarModelo'] = "back_end/flota/Mantenedores/eliminarModelo";
-	$route['getDataModelo'] = "back_end/flota/Mantenedores/getDataModelo";
+	$route['listaModelos'] = "back_end/flota/mantenedores/listaModelos";
+	$route['formModelo'] = "back_end/flota/mantenedores/formModelo";
+	$route['eliminarModelo'] = "back_end/flota/mantenedores/eliminarModelo";
+	$route['getDataModelo'] = "back_end/flota/mantenedores/getDataModelo";
 
-	$route['listaMarcas'] = "back_end/flota/Mantenedores/listaMarcas";
-	$route['formMarca'] = "back_end/flota/Mantenedores/formMarca";
-	$route['eliminarMarca'] = "back_end/flota/Mantenedores/eliminarMarca";
-	$route['getDataMarca'] = "back_end/flota/Mantenedores/getDataMarca";
+	$route['listaMarcas'] = "back_end/flota/mantenedores/listaMarcas";
+	$route['formMarca'] = "back_end/flota/mantenedores/formMarca";
+	$route['eliminarMarca'] = "back_end/flota/mantenedores/eliminarMarca";
+	$route['getDataMarca'] = "back_end/flota/mantenedores/getDataMarca";
 	
 	
 	

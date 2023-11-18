@@ -41,7 +41,7 @@ class Flota extends CI_Controller {
       }
 	}
 
-	//USUARIOS
+	//VEHICULOS
 
 		public function formCargaMasiva(){
 			sleep(1);
@@ -144,9 +144,10 @@ class Flota extends CI_Controller {
 				$modelos = $this->Flotamodel->listaModelos();
 				$motivos_bajas = $this->Flotamodel->listaMotivos();
 				$tipos = $this->Flotamodel->listaTipos();
-				$tipos_mmc = $this->Flotamodel->listaTiposMMC();
+				$tipos_mmc = $this->Flotamodel->listaTiposMcc();
 				$plazas = $this->Flotamodel->listaPlazas();
 				$conductores = $this->Flotamodel->listaConductores();
+				$tipos_mantenimiento = $this->Flotamodel->listaTiposMcc();
 				
 				$datos = array(
 					'desde' => $desde,
@@ -160,6 +161,7 @@ class Flota extends CI_Controller {
 					'motivos_bajas' => $motivos_bajas,
 					'plazas' => $plazas,
 					'conductores' => $conductores,
+					'tipos_mantenimiento' => $tipos_mantenimiento,
 			    );
 
 				$this->load->view('back_end/flota/vehiculos',$datos);

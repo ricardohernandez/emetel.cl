@@ -981,6 +981,10 @@ div.dataTables_wrapper div.dataTables_info{
 
 /*********SELECT2*******/
 
+
+.select2-results__options{
+  padding-left:10px!important;
+}
 .select2-container--default .select2-selection--single {
   height: 34px;
 }

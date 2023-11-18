@@ -387,16 +387,7 @@ $config = array(
                     'label'   => 'Estado',
                     'rules'   => 'trim|required'
                 ),
-                array(
-                    'field'   => 'desde_mat',
-                    'label'   => 'Desde',
-                    'rules'   => 'trim|required'
-                ),  
-                array(
-                    'field'   => 'hasta_mat',
-                    'label'   => 'Hasta',
-                    'rules'   => 'trim|required'
-                )
+           
             ),
 
             'formActividad' => array(
@@ -481,7 +472,51 @@ $config = array(
                     'field'   => 'combustible',
                     'label'   => 'Combustible',
                     'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'desde_mmc',
+                    'label'   => 'Desde',
+                    'rules'   => 'trim|required'
+                ),  
+                array(
+                    'field'   => 'hasta_mmc',
+                    'label'   => 'Hasta',
+                    'rules'   => 'trim|required'
                 )
+            ),
+			
+            'formTicketMant' => array(
+              
+                array(
+                    'field'   => 'patente_mantencion',
+                    'label'   => 'Patente',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'actividad_mantencion',
+                    'label'   => 'Actividad',
+                    'rules'   => 'trim|required'
+                ),  
+                array(
+                    'field'   => 'estado_mant',
+                    'label'   => 'Estado',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'nuevo_km',
+                    'label'   => 'Nuevo km',
+                    'rules'   => 'trim'
+                ),
+                array(
+                    'field'   => 'nueva_fecha',
+                    'label'   => 'Nueva fecha vencimiento',
+                    'rules'   => 'trim'
+                ),
+                array(
+                    'field'   => 'observacion_mant',
+                    'label'   => 'Observación',
+                    'rules'   => 'trim'
+                ),
             ),
             
  );

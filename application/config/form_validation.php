@@ -26,37 +26,37 @@ $config = array(
             array(
                   'field'   => 'jefe',
                   'label'   => 'Jefe',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             array(
                   'field'   => 'nacionalidad',
                   'label'   => 'Nacionalidad',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             array(
                   'field'   => 'area',
                   'label'   => 'Zona',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             array(
                   'field'   => 'fecha_ingreso',
                   'label'   => 'Fecha ingreso',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             array(
                   'field'   => 'cargo',
                   'label'   => 'Cargo',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             array(
                   'field'   => 'plaza',
                   'label'   => 'Plaza',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             array(
                   'field'   => 'domicilio',
                   'label'   => 'Domicilio',
-                  'rules'   => 'trim|required'
+                  'rules'   => 'trim'
                   ),
             ),
 

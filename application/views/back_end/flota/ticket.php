@@ -134,8 +134,7 @@
 
   /*********INGRESO************/
 
-    cargaActividadesMant()
-    cargaPatentesMant()
+     cargaPatentesMant()
 
     $(document).off('click', '.btn_nuevo_ticket').on('click', '.btn_nuevo_ticket',function(event) {
         $('#modal_ticket').modal('toggle'); 
@@ -147,8 +146,8 @@
         $("#hash_ticket").val("");
         $("#formTicket input,#formTicket select,#formTicket button,#formTicket").prop("disabled", false);
         $(".cont_edit").hide();
-        cargaActividadesMant()
         cargaPatentesMant()
+        $('#actividad_mantencion').val(null).trigger('change.select2');
     });     
 
     $(document).off('submit', '#formTicket').on('submit', '#formTicket',function(event) {
@@ -233,6 +232,12 @@
               $("#observacion_mant").val(data.datos[dato].observacion_mantenimiento);
               $('#patente_mantencion').val(data.datos[dato].id_vehiculo).trigger('change');
               $('#actividad_mantencion').val(data.datos[dato].id_actividad).trigger('change');
+
+              setTimeout(() => {
+                cargaActividadesMant(data.datos[dato].id_vehiculo)
+                console.log(data.datos[dato].id_vehiculo)
+              }, 1000);
+          
               $("#estado_mant  option[value='"+data.datos[dato].id_estado+"'").prop("selected", true);
 
             } 
@@ -304,24 +309,30 @@
         autoHideDelay: 5000,
       });
     }
+ 
+    $(document).off('change', '#patente_mantencion').on('change', '#patente_mantencion',function(event) {
+      const vehiculo = $(this).val();
+      cargaActividadesMant(vehiculo)
+    })
 
-    async function cargaActividadesMant() {
-      $.getJSON(base + "listaActividadesMant", function(data) {
-        response = data;
-        }).done(function() {
+    $(document).off('change', '#actividad_mantencion').on('change', '#actividad_mantencion',function(event) {
+      $.post('obtenerTipoActividad'+"?"+$.now(),{"actividad": $(this).val()}, function(data) {
+       
+        if(data.tipo=="Km"){
+          $(".nueva_fecha_cont").hide()
+          $(".nuevo_km_cont").show()
 
-        $("#actividad_mantencion").select2({
-          placeholder: 'Seleccione Actividad | Todos',
-          data: response,
-          width: '100%',    
-          allowClear: true
-        });
-        $('#actividad_mantencion').val(null).trigger('change.select2');
+        }else if(data.tipo=="Venc."){
+          $(".nuevo_km_cont").hide()
+          $(".nueva_fecha_cont").show()
+        }else{
+          $(".nuevo_km_cont").show()
+          $(".nueva_fecha_cont").show()
+        }
 
-      });
-    }
+      },"json");
+    })
     
-
     async function cargaPatentesMant() {
       $.getJSON(base + "listaPatentesMant", function(data) {
         response = data;
@@ -334,6 +345,26 @@
           allowClear: true
         });
         $('#patente_mantencion').val(null).trigger('change.select2');
+
+      });
+    }
+
+    async function cargaActividadesMant(vehiculo) {
+
+       $.getJSON(base + "listaActividadesMant", {'vehiculo': vehiculo},function(data) {
+        response = data;
+        }).done(function() {
+
+        $("#actividad_mantencion").empty();
+
+        $("#actividad_mantencion").select2({
+          placeholder: 'Seleccione Actividad',
+          data: response,
+          width: '100%',    
+          allowClear: true
+        });
+
+      /*  $('#actividad_mantencion').val(null).trigger('change.select2'); */
 
       });
     }
@@ -424,6 +455,7 @@
                 <div class="form-group">
                  <label for="actividad_mantencion" class="col-sm-12 col-form-label col-form-label-sm">Actividad de mantención</label>
                   <select id="actividad_mantencion" name="actividad_mantencion" style="width:100%!important;">
+                  <option value>Actividades</option>
                   </select>
                 </div>
               </div>
@@ -432,9 +464,9 @@
                 <div class="form-group">
                   <label for="estado" class="col-sm-12 col-form-label col-form-label-sm">Estado</label>
                   <select id="estado_mant" name="estado_mant" class="custom-select custom-select-sm">
-                    <option value="" selected>Seleccione</option>
+                   <!--  <option value="">Seleccione</option> -->
                     <?php foreach ($estados as $e) { ?>
-                      <option value="<?php echo $e["id"]; ?>"><?php echo $e["estado"]; ?></option>
+                      <option value="<?php echo $e["id"]; ?>" <?php echo ($e["id"] == 1) ? "selected" : ""; ?>><?php echo $e["estado"]; ?></option>
                     <?php } ?>
                   </select>
                 </div>
@@ -447,14 +479,14 @@
                 </div>
               </div>
 
-              <div class="col-lg-12">
+              <div class="col-lg-12 nueva_fecha_cont">
                 <div class="form-group">
                   <label for="nueva_fecha" class="col-sm-12 col-form-label col-form-label-sm">Nueva fecha venc.</label>
                   <input placeholder="Nueva fecha venc."  type="date" name="nueva_fecha" id="nueva_fecha" class="form-control form-control-sm" autocomplete="off" />
                 </div>
               </div>
 
-              <div class="col-lg-12">
+              <div class="col-lg-12 nuevo_km_cont">
                 <div class="form-group">
                   <label for="nuevo_km" class="col-sm-12 col-form-label col-form-label-sm">Nuevo km</label>
                   <input placeholder="Nuevo km" size="10" maxlength="10" type="text" name="nuevo_km" id="nuevo_km" class="numbersOnly form-control form-control-sm" autocomplete="off" />

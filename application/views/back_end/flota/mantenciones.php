@@ -1615,7 +1615,7 @@
 
               <div class="col-lg-2">  
                 <div class="form-group">
-                  <label for="hasta_mmc" class="col-sm-12 col-form-label col-form-label-sm">Desde</label>
+                  <label for="hasta_mmc" class="col-sm-12 col-form-label col-form-label-sm">Hasta</label>
                     <select name="hasta_mmc" id="hasta_mmc" class="form-control form-control-sm">
                         <?php
                         $anio_actual = date("Y");

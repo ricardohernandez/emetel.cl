@@ -153,7 +153,8 @@
 	$route['getDataTicket'] = "back_end/flota/ticket/getDataTicket";
 	$route['listaActividadesMant'] = "back_end/flota/ticket/listaActividadesMant";
 	$route['listaPatentesMant'] = "back_end/flota/ticket/listaPatentesMant";
-	
+	$route['obtenerTipoActividad'] = "back_end/flota/ticket/obtenerTipoActividad";
+
 	
 
 /******************VEHICULOS*************************/
@@ -167,10 +168,8 @@
 
 	$route['vistaMantenciones'] = "back_end/flota/mantenedores/vistaMantenciones";
 	$route['listaTiposMmc'] = "back_end/flota/mantenedores/listaTiposMmc";
-	
-	
 
-
+	 
 	$route['listaMat'] = "back_end/flota/mantenedores/listaMat";
 	$route['formMat'] = "back_end/flota/mantenedores/formMat";
 	$route['getDataMat'] = "back_end/flota/mantenedores/getDataMat";

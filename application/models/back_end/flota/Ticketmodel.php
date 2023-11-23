@@ -29,6 +29,7 @@ class Ticketmodel extends CI_Model {
 			CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible,' - ', tmmc.desde,' - ',tmmc.hasta) as  'tipo_mantenimiento',
 			
 			CONCAT(SUBSTRING_INDEX(us.nombres, ' ', 1), ' ', SUBSTRING_INDEX(us.apellidos, ' ', 1)) AS conductor_actual, 
+			IF(mat.nueva_fecha_venc != '1970-01-01' AND mat.nueva_fecha_venc != '0000-00-00', DATE_FORMAT(mat.nueva_fecha_venc, '%Y-%m-%d'), '') AS nueva_fecha_venc,
 
 		");
 
@@ -64,6 +65,19 @@ class Ticketmodel extends CI_Model {
 		}
 	}
 
+	public function obtenerTipoActividad($actividad){ 
+		$this->db->select("unidad");
+		$this->db->where('id', $actividad);
+		$res=$this->db->get('vehiculos_mantenciones_actividades');
+		
+		if($res->num_rows()>0){
+			$row = $res->row_array();
+			return $row["unidad"];
+		}
+		return FALSE;
+	}
+
+	
 	public function formTicket($data){
 		if($this->db->insert('vehiculos_mantenciones_ticket', $data)){
 			return $this->db->insert_id();
@@ -102,8 +116,15 @@ class Ticketmodel extends CI_Model {
 	}
 
 	public function listaPatentesMant(){
-		$this->db->select("id,patente");
-		$res=$this->db->get('vehiculos');
+		$this->db->select("v.id as id,CONCAT(vt.tipo,' - ',vma.marca,' - ',vmo.modelo,' - ',vc.combustible,' - ', tmmc.desde,' - ',tmmc.hasta ,' - ',v.patente) as patente");
+
+		$this->db->join('vehiculos_tipos_mmc as tmmc', 'tmmc.id = v.id_tipo_mantenimiento', 'left');
+		$this->db->join('vehiculos_tipo as vt', 'vt.id = tmmc.id_tipo', 'left');
+		$this->db->join('vehiculos_marca as vma', 'vma.id = tmmc.id_marca', 'left');
+		$this->db->join('vehiculos_modelo as vmo', 'vmo.id = tmmc.id_modelo', 'left');
+		$this->db->join('vehiculos_combustible as vc', 'vc.id = tmmc.id_combustible', 'left');
+		
+		$res=$this->db->get('vehiculos v');
 		if($res->num_rows()>0){
 			$array=array();
 			foreach($res->result_array() as $key){
@@ -117,10 +138,19 @@ class Ticketmodel extends CI_Model {
 		return FALSE;
 	}
 	
-	public function listaActividadesMant(){
-		$this->db->order_by('actividad', 'asc');
-		$this->db->where('estado', "activo");
-		$res=$this->db->get('vehiculos_mantenciones_actividades');
+	public function listaActividadesMant($vehiculo){
+		$this->db->select('vma.id as id,
+		vma.actividad as actividad');
+		
+		$this->db->join('vehiculos_mantenciones_actividades vma', 'vma.id = vmt.id_actividad', 'left');
+		$this->db->join('vehiculos_tipos_mmc vtm', 'vtm.id = vmt.id_tipo_mmc', 'left');
+		$this->db->join('vehiculos v', 'v.id_tipo_mantenimiento = vtm.id', 'left');
+		
+		$this->db->where('v.id', $vehiculo);
+		
+		$this->db->order_by('vma.actividad', 'asc');
+		$this->db->where('vma.estado', "activo");
+		$res=$this->db->get('vehiculos_mantenciones_tipos vmt');
 
 		if($res->num_rows()>0){
 			$array=array();

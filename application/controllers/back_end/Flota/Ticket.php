@@ -75,7 +75,8 @@ class Ticket extends CI_Controller {
 	}
 	
 	public function listaActividadesMant(){
-		echo $this->Ticketmodel->listaActividadesMant();
+		$vehiculo=$this->security->xss_clean(strip_tags($this->input->get_post("vehiculo")));
+		echo $this->Ticketmodel->listaActividadesMant($vehiculo);
 	}
 
 	public function listaPatentesMant(){
@@ -153,6 +154,22 @@ class Ticket extends CI_Controller {
 		
 			if($data){
 				echo json_encode(array('res'=>"ok", 'datos' => $data));exit;
+			}else{
+				echo json_encode(array('res'=>"error", 'msg' => ERROR_MSG));exit;
+			}	
+		}else{
+			exit('No direct script access allowed');
+		}
+	}
+
+	public function obtenerTipoActividad(){
+		if($this->input->is_ajax_request()){
+			$this->checkLogin();
+			$actividad=$this->security->xss_clean(strip_tags($this->input->post("actividad")));
+			$data = $this->Ticketmodel->obtenerTipoActividad($actividad);
+		
+			if($data){
+				echo json_encode(array('res'=>"ok", 'tipo' => $data));exit;
 			}else{
 				echo json_encode(array('res'=>"error", 'msg' => ERROR_MSG));exit;
 			}	

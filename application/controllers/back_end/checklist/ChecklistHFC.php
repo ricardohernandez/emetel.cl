@@ -537,6 +537,9 @@ class checklistHFC extends CI_Controller {
 				$datos = array("data" => $data, "titulo" => $titulo);
 				$html = $this->load->view('back_end/checklist/checklist_hfc/checklist/correo',$datos,TRUE);
 
+
+				return FALSE;
+				/*
 				if($prueba){
 
 					$para = array("ricardo.hernandez@km-telecomunicaciones.cl");
@@ -554,6 +557,7 @@ class checklistHFC extends CI_Controller {
 					$this->email->from("reportes@xr3t.cl","Reporte plataforma XR3");
 
 				}
+				*/
 
 				$this->email->to($para);
 				$this->email->cc($copias);

@@ -515,6 +515,8 @@ class Ast extends CI_Controller {
 				$datos = array("data" => $data, "titulo" => $titulo);
 				$html = $this->load->view('back_end/ast/correo',$datos,TRUE);
 
+				return FALSE;
+				/*
 				if($prueba){
 					$para = array("ricardo.hernandez@km-telecomunicaciones.cl","soporteplataforma@xr3t.cl");
 					$copias = array("ricardo.hernandez@km-t.cl");
@@ -527,6 +529,7 @@ class Ast extends CI_Controller {
 					$copias = array("roberto.segovia@xr3.cl","cristian.cortes@xr3.cl");
 					$this->email->from("reportes@xr3t.cl","Reporte plataforma XR3");
 				}
+				*/
 
 				$this->email->to($para);
 				$this->email->cc($copias);
@@ -571,6 +574,8 @@ class Ast extends CI_Controller {
 				$datos = array("data" => $data, "titulo" => $titulo);
 				$html = $this->load->view('back_end/ast/correo_fallos',$datos,TRUE);
 
+				return FALSE;
+				/*
 				if($prueba){
 					$para = array("ricardo.hernandez@km-telecomunicaciones.cl","soporteplataforma@xr3t.cl");
 					$copias = array("ricardo.hernandez@km-t.cl","ricardo.hernandez@splice.cl");
@@ -583,6 +588,7 @@ class Ast extends CI_Controller {
 					$copias = array("roberto.segovia@xr3.cl","cristian.cortes@xr3.cl");
 					$this->email->from("reportes@xr3t.cl","Reporte plataforma XR3");
 				}
+				*/
 
 				$this->email->to($para);
 				$this->email->cc($copias);

@@ -428,6 +428,8 @@ class Checklist extends CI_Controller {
 				$datos = array("data" => $data, "titulo" => $titulo);
 				$html = $this->load->view('back_end/checklist/checklist_herramientas/checklist/correo',$datos,TRUE);
 
+				return FALSE;
+				/*
 				if($prueba){
 
 					$para = array("ricardo.hernandez@km-telecomunicaciones.cl","soporteplataforma@xr3t.cl");
@@ -442,12 +444,11 @@ class Checklist extends CI_Controller {
 					$copias = array();
 					$copias[]="roberto.segovia@xr3.cl";
 					$copias[] = $key["correo_auditor_empresa"]!="" ? $key["correo_auditor_empresa"] : $key["correo_auditor_personal"];
-					/*print_r($para);
-					print_r($copias);exit;*/
-					
+
 					$this->email->from("reportes@xr3t.cl","Reporte plataforma XR3");
 
 				}
+				*/
 
 				$this->email->to($para);
 				$this->email->cc($copias);
@@ -503,6 +504,8 @@ class Checklist extends CI_Controller {
 					$html = $this->load->view('back_end/checklist/checklist_herramientas/checklist/correo_fallos',$datos,TRUE);
 					/*echo $html;exit;*/
 
+					return FALSE;
+					/*
 					if($prueba){
 
 						$para = array("ricardo.hernandez@km-telecomunicaciones.cl","soporteplataforma@xr3t.cl");
@@ -517,6 +520,7 @@ class Checklist extends CI_Controller {
 						$this->email->from("reportes@xr3t.cl","Reporte plataforma XR3");
 
 					}
+					*/
 
 					$this->email->to($para);
 					$this->email->cc($copias);

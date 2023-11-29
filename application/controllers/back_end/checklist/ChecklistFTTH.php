@@ -534,6 +534,8 @@ class checklistFTTH extends CI_Controller {
 				$datos = array("data" => $data, "titulo" => $titulo);
 				$html = $this->load->view('back_end/checklist/checklist_ftth/checklist/correo',$datos,TRUE);
 
+				return FALSE;
+				/*
 				if($prueba){
 
 					$para = array("ricardo.hernandez@km-telecomunicaciones.cl");
@@ -549,10 +551,8 @@ class checklistFTTH extends CI_Controller {
 					$copias[]="roberto.segovia@xr3.cl";
 					$copias[] = $key["correo_auditor_empresa"]!="" ? $key["correo_auditor_empresa"] : $key["correo_auditor_personal"];
 					$this->email->from("reportes@xr3t.cl","Reporte plataforma XR3");
-					/*print_r($para);
-					print_r($copias);exit;*/
-
 				}
+				*/
 
 				$this->email->to($para);
 				$this->email->cc($copias);

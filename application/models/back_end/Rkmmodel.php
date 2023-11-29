@@ -82,7 +82,10 @@ class Rkmmodel extends CI_Model {
 	}
 
 	public function listaUsuarios(){
-		$this->db->select("id,CONCAT(SUBSTRING_INDEX(nombres, ' ', 1), ' ', SUBSTRING_INDEX(apellidos, ' ', 1)) AS nombre,rut");
+		$this->db->select("
+		id,
+		CONCAT(SUBSTRING_INDEX(nombres, ' ', 1), ' ', SUBSTRING_INDEX(apellidos, ' ', 1)) AS nombre,
+		concat(substr(replace(rut,'-',''),1,char_length(replace(rut,'-',''))-1),'-',substr(replace(rut,'-',''),char_length(replace(rut,'-','')))) as 'rut',");
 		$this->db->order_by('nombres', 'asc');
 		$this->db->where('estado', "1");
 		$res=$this->db->get('usuarios');

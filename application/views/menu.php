@@ -109,7 +109,38 @@
             <a href="#" class="sidenav__menu-url">Aplicaciones</a>
             <button class="sidenav__menu-toggle" aria-haspopup="true" aria-label="Open dropdown"><i class="ui-arrow-down"></i></button>
             <ul class="sidenav__menu-dropdown">
-               <li><a class="sidenav__menu-url" href="<?php echo base_url() ?>flota"> Flota</a></li>
+               <li class="">
+                  <a class="sidenav__menu-url" href="#!">CKL - Checklist operativos</a>
+                  <button class="sidenav__menu-toggle" aria-haspopup="true" aria-label="Open dropdown"><i class="ui-arrow-down"></i></button>
+                  <ul class="sidenav__menu-dropdown">
+                     <?php  
+                        if($perfil<=3){
+                     ?>
+
+                     <li><a  class="sidenav__menu-url" href="<?php echo base_url() ?>checklist_herramientas"> CLH - Checklist herramientas</a></li>
+                     <li><a  class="sidenav__menu-url" href="<?php echo base_url() ?>checklistHFC"> CLC - Checklist coaxial HFC</a></li>
+                     <li><a  class="sidenav__menu-url" href="<?php echo base_url() ?>checklistFTTH"> CLF - Checklist fibra FTTH</a></li>
+
+                     <?php
+                        }
+                        ?>
+                     <li><a  class="sidenav__menu-url" href="<?php echo base_url() ?>ast">CLA - Checklist AST Análisis seguro de trabajo</a></li>
+
+                     <?php  
+                        if($perfil<=3){
+                     ?>
+
+                     <li><a  class="sidenav__menu-url" href="<?php echo base_url() ?>checklist_reportes">RCH - Reporte Checklist</a></li>
+
+                     <?php
+                        }
+                     ?>
+
+                  </ul>
+               </li>
+               <li><a class="sidenav__menu-url" href="<?php echo base_url() ?>flota"> CFV-Control flota de vehiculos</a></li>
+               <li><a class="sidenav__menu-url" href="<?php echo base_url() ?>rkm"> RKM-Reporte de kilometraje</a></li>
+               
             </ul>
          </li>
         
@@ -177,8 +208,31 @@
                   <li class="nav__dropdown ">
                      <a href="#">Aplicaciones</a>
                      <ul class="nav__dropdown-menu">
-                   
-                        <li><a  class="menu_list" href="<?php echo base_url() ?>flota"> Control Flota</a></li>
+                        <li class="nav__dropdown">
+                           <a class="menu_list" href="#!">CKL - Checklist operativos</a>
+                           <ul class="nav__dropdown-menu">
+                              <?php  
+                                 if($perfil<=3){
+                                  ?>
+                              <li><a  class="menu_list" href="<?php echo base_url() ?>checklist_herramientas"> CLH - Checklist herramientas</a></li>
+                              <li><a  class="menu_list" href="<?php echo base_url() ?>checklistHFC">CLC - Checklist coaxial HFC</a></li>
+                              <li><a  class="menu_list" href="<?php echo base_url() ?>checklistFTTH">CLF - Checklist fibra FTTH</a></li>
+                              <?php
+                                 }
+                                 ?>
+                              <li><a  class="menu_list" href="<?php echo base_url() ?>ast">CLA - Checklist AST Análisis seguro de trabajo</a></li>
+
+                              <?php  
+                                 if($perfil<=3){
+                              ?>
+                              <li><a  class="menu_list" href="<?php echo base_url() ?>checklist_reportes">RCH - Reporte Checklist</a></li>
+                              <?php
+                                 }
+                              ?>
+                           </ul>
+                        </li>
+                        <li><a  class="menu_list" href="<?php echo base_url() ?>flota"> CFV-Control flota de vehiculos </a></li>
+                        <li><a  class="menu_list" href="<?php echo base_url() ?>rkm"> RKM-Reporte de kilometraje</a></li>
 
                      </ul>
                   </li>

@@ -518,6 +518,24 @@ $config = array(
                     'rules'   => 'trim'
                 ),
             ),
+
+            'formrkm' => array(
+                array(
+                    'field'   => 'id_tecnico',
+                    'label'   => 'código técnico',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'id_vehiculo',
+                    'label'   => 'patente',
+                    'rules'   => 'trim|required'
+                ),  
+                array(
+                    'field'   => 'kilometraje',
+                    'label'   => 'kilometraje',
+                    'rules'   => 'trim|required'
+                ),
+            ),
             
  );
 

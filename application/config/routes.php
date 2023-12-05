@@ -96,6 +96,7 @@
  
 /*******Mantenedores*******/
 
+	/***** USUARIOS *****/
 	$route['mantenedor_usuarios'] = "back_end/mantenedores/usuarios/index";
 	$route['vistaUsuarios'] = "back_end/mantenedores/usuarios/vistaUsuarios";
 	$route['listaUsuarios'] = "back_end/mantenedores/usuarios/listaUsuarios";
@@ -107,6 +108,8 @@
 	$route['formCargaMasivaUsuarios'] = "back_end/mantenedores/usuarios/formCargaMasivaUsuarios";
 	$route['eliminaUsuario'] = "back_end/mantenedores/usuarios/eliminaUsuario";
 	$route['correoDatosFaltantes'] = "back_end/mantenedores/usuarios/correoDatosFaltantes";
+
+	/*CARGOS*/
 	
 	$route['vistaCargos'] = "back_end/mantenedores/usuarios/vistaCargos";
 	$route['listaCargos'] = "back_end/mantenedores/usuarios/listaCargos";
@@ -114,11 +117,16 @@
 	$route['formCargos'] = "back_end/mantenedores/usuarios/formCargos";
 	$route['eliminaCargo'] = "back_end/mantenedores/usuarios/eliminaCargo";
 
+	/*PROYECTOS*/
+
 	$route['vistaProyectos'] = "back_end/mantenedores/usuarios/vistaProyectos";
 	$route['listaProyectos'] = "back_end/mantenedores/usuarios/listaProyectos";
 	$route['getDataProyectos'] = "back_end/mantenedores/usuarios/getDataProyectos";
 	$route['formProyectos'] = "back_end/mantenedores/usuarios/formProyectos";
 	$route['eliminaProyectos'] = "back_end/mantenedores/usuarios/eliminaProyectos";
+
+
+	/*AREAS*/
 
 	$route['vistaAreas'] = "back_end/mantenedores/usuarios/vistaAreas";
 	$route['listaAreas'] = "back_end/mantenedores/usuarios/listaAreas";
@@ -127,11 +135,15 @@
 	$route['eliminaAreas'] = "back_end/mantenedores/usuarios/eliminaAreas";
 
 
+	/*PLAZAS*/
+
 	$route['vistaPlazas'] = "back_end/mantenedores/usuarios/vistaPlazas";
 	$route['listaPlazas'] = "back_end/mantenedores/usuarios/listaPlazas";
 	$route['getDataPlazas'] = "back_end/mantenedores/usuarios/getDataPlazas";
 	$route['formPlazas'] = "back_end/mantenedores/usuarios/formPlazas";
 	$route['eliminaPlazas'] = "back_end/mantenedores/usuarios/eliminaPlazas";
+
+	/*JEFES*/
 
 	$route['vistaJefes'] = "back_end/mantenedores/usuarios/vistaJefes";
 	$route['listaJefes'] = "back_end/mantenedores/usuarios/listaJefes";
@@ -139,12 +151,15 @@
 	$route['formJefes'] = "back_end/mantenedores/usuarios/formJefes";
 	$route['eliminaJefes'] = "back_end/mantenedores/usuarios/eliminaJefes";
 
+	/*PERFILES*/
+
 	$route['vistaPerfiles'] = "back_end/mantenedores/usuarios/vistaPerfiles";
 	$route['listaPerfiles'] = "back_end/mantenedores/usuarios/listaPerfiles";
 	$route['getDataPerfiles'] = "back_end/mantenedores/usuarios/getDataPerfiles";
 	$route['formPerfiles'] = "back_end/mantenedores/usuarios/formPerfiles";
 	$route['eliminaPerfiles'] = "back_end/mantenedores/usuarios/eliminaPerfiles";
 
+	/*TICKET*/
 
 	$route['vistaTicket'] = "back_end/flota/ticket/vistaTicket";
 	$route['listaTicket'] = "back_end/flota/ticket/listaTicket";
@@ -155,6 +170,44 @@
 	$route['listaPatentesMant'] = "back_end/flota/ticket/listaPatentesMant";
 	$route['obtenerTipoActividad'] = "back_end/flota/ticket/obtenerTipoActividad";
 
+	/*HERRAMIENTAS*/
+
+	$route['mantenedor_herramientas'] = "back_end/mantenedores/herramientas/index";
+	$route['vistaHerramientas'] = "back_end/mantenedores/herramientas/vistaHerramientas";
+	$route['listaHerramientas'] = "back_end/mantenedores/herramientas/listaHerramientas";
+	$route['getDataHerramientas'] = "back_end/mantenedores/herramientas/getDataHerramientas";
+	$route['formHerramientas'] = "back_end/mantenedores/herramientas/formHerramientas";
+	$route['eliminaHerramienta'] = "back_end/mantenedores/herramientas/eliminaHerramienta";
+	$route['excelHerramientas/(:any)'] = "back_end/mantenedores/herramientas/excelHerramientas/$1";
+
+	/*FALLOS*/
+	
+	$route['mantenedor_responsables_fallos'] = "back_end/mantenedores/responsable_fallos/index";
+	$route['vistaResponsablesFallosHerramientas'] = "back_end/mantenedores/responsable_fallos/vistaResponsablesFallosHerramientas";
+	$route['listaResponsablesFallosHerramientas'] = "back_end/mantenedores/responsable_fallos/listaResponsablesFallosHerramientas";
+	$route['formResponsablesFallosHerramientas'] = "back_end/mantenedores/responsable_fallos/formResponsablesFallosHerramientas";
+	$route['getDataResponsableFallosHerramientas'] = "back_end/mantenedores/responsable_fallos/getDataResponsableFallosHerramientas";
+	$route['eliminaResponsableFallosHerramientas'] = "back_end/mantenedores/responsable_fallos/eliminaResponsableFallosHerramientas";
+
+	/*HFC*/
+	
+	$route['mantenedor_checklist_hfc'] = "back_end/mantenedores/checklistHFC/index";
+	$route['vistaMantChecklistHFC'] = "back_end/mantenedores/checklistHFC/vistaMantChecklistHFC/index";
+	$route['listaMantChecklistHFC'] = "back_end/mantenedores/checklistHFC/listaMantChecklistHFC";
+	$route['getDataMantChecklistHFC'] = "back_end/mantenedores/checklistHFC/getDataMantChecklistHFC";
+	$route['formMantChecklistHFC'] = "back_end/mantenedores/checklistHFC/formMantChecklistHFC";
+	$route['eliminaMantChecklistHFC'] = "back_end/mantenedores/checklistHFC/eliminaMantChecklistHFC";
+	$route['excelMantChecklistHFC/(:any)'] = "back_end/mantenedores/checklistHFC/excelMantChecklistHFC/$1";
+
+	/*FTTH*/
+
+    $route['mantenedor_checklist_ftth'] = "back_end/mantenedores/checklistFTTH/index";
+	$route['vistaMantChecklistFTTH'] = "back_end/mantenedores/checklistFTTH/vistaMantChecklistFTTH/index";
+	$route['listaMantChecklistFTTH'] = "back_end/mantenedores/checklistFTTH/listaMantChecklistFTTH";
+	$route['getDataMantChecklistFTTH'] = "back_end/mantenedores/checklistFTTH/getDataMantChecklistFTTH";
+	$route['formMantChecklistFTTH'] = "back_end/mantenedores/checklistFTTH/formMantChecklistFTTH";
+	$route['eliminaMantChecklistFTTH'] = "back_end/mantenedores/checklistFTTH/eliminaMantChecklistFTTH";
+	$route['excelMantChecklistFTTH/(:any)'] = "back_end/mantenedores/checklistFTTH/excelMantChecklistFTTH/$1";
 	
 
 /******************VEHICULOS*************************/

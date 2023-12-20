@@ -1,63 +1,158 @@
 <?php  if ( ! defined('BASEPATH')) exit('No direct script access allowed');
 
 $config = array(
+
+            'formAst' => array(
+                array(
+                    'field'   => 'tecnico',
+                    'label'   => 'Técnico',
+                    'rules'   => 'trim|required'
+                    ),
+                
+            ),
+            'formMantActividades' => array(
+                array(
+                    'field'   => 'aplica',
+                    'label'   => 'Aplica',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+            'formChecklistHFC' => array(
+                array(
+                    'field'   => 'tecnico',
+                    'label'   => 'Técnico',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+
+            'formMantChecklistHFC' => array(
+                array(
+                    'field'   => 'tipo',
+                    'label'   => 'Tipo',
+                    'rules'   => 'trim|required'
+                    ),
+                array(
+                    'field'   => 'descripcion',
+                    'label'   => 'Descripción',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+
+            'formMantChecklistFTTH' => array(
+                array(
+                    'field'   => 'tipo',
+                    'label'   => 'Tipo',
+                    'rules'   => 'trim|required'
+                    ),
+                array(
+                    'field'   => 'descripcion',
+                    'label'   => 'Descripción',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+
+            'formFH' => array(
+                array(
+                    'field'   => 'solucion_fecha',
+                    'label'   => 'Fecha solución',
+                    'rules'   => 'trim|required'
+                )
+            ),
+
+            'formFHFC' => array(
+                array(
+                    'field'   => 'solucion_fecha',
+                    'label'   => 'Fecha solución',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+            
+
+            'formChecklistFTTH' => array(
+                array(
+                    'field'   => 'tecnico',
+                    'label'   => 'Técnico',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+            
+            'formFFTTH' => array(
+                array(
+                    'field'   => 'solucion_fecha',
+                    'label'   => 'Fecha solución',
+                    'rules'   => 'trim|required'
+                    )
+            ),
+            
+            'formHerramientas' => array(
+                array(
+                    'field'   => 'tipo',
+                    'label'   => 'Tipo',
+                    'rules'   => 'trim|required'
+                    ),
+                array(
+                    'field'   => 'descripcion',
+                    'label'   => 'Descripción',
+                    'rules'   => 'trim|required'
+                    )
+            ),
           
-      'formUsuario' => array(
-            array(
-                  'field'   => 'nombres',
-                  'label'   => 'Nombres',
-                  'rules'   => 'trim|required'
-                  ),
-            array(
-                  'field'   => 'apellidos',
-                  'label'   => 'Apellidos',
-                  'rules'   => 'trim|required'
-            ),
-            array(
-                  'field'   => 'perfil',
-                  'label'   => 'Perfil',
-                  'rules'   => 'trim|required'
-            ),
-            array(
-                  'field'   => 'rut',
-                  'label'   => 'Rut',
-                  'rules'   => 'trim|required'
-            ),
-            array(
-                  'field'   => 'jefe',
-                  'label'   => 'Jefe',
-                  'rules'   => 'trim'
-                  ),
-            array(
-                  'field'   => 'nacionalidad',
-                  'label'   => 'Nacionalidad',
-                  'rules'   => 'trim'
-                  ),
-            array(
-                  'field'   => 'area',
-                  'label'   => 'Zona',
-                  'rules'   => 'trim'
-                  ),
-            array(
-                  'field'   => 'fecha_ingreso',
-                  'label'   => 'Fecha ingreso',
-                  'rules'   => 'trim'
-                  ),
-            array(
-                  'field'   => 'cargo',
-                  'label'   => 'Cargo',
-                  'rules'   => 'trim'
-                  ),
-            array(
-                  'field'   => 'plaza',
-                  'label'   => 'Plaza',
-                  'rules'   => 'trim'
-                  ),
-            array(
-                  'field'   => 'domicilio',
-                  'label'   => 'Domicilio',
-                  'rules'   => 'trim'
-                  ),
+            'formUsuario' => array(
+                array(
+                    'field'   => 'nombres',
+                    'label'   => 'Nombres',
+                    'rules'   => 'trim|required'
+                    ),
+                array(
+                    'field'   => 'apellidos',
+                    'label'   => 'Apellidos',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'perfil',
+                    'label'   => 'Perfil',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'rut',
+                    'label'   => 'Rut',
+                    'rules'   => 'trim|required'
+                ),
+                array(
+                    'field'   => 'jefe',
+                    'label'   => 'Jefe',
+                    'rules'   => 'trim'
+                    ),
+                array(
+                    'field'   => 'nacionalidad',
+                    'label'   => 'Nacionalidad',
+                    'rules'   => 'trim'
+                    ),
+                array(
+                    'field'   => 'area',
+                    'label'   => 'Zona',
+                    'rules'   => 'trim'
+                    ),
+                array(
+                    'field'   => 'fecha_ingreso',
+                    'label'   => 'Fecha ingreso',
+                    'rules'   => 'trim'
+                    ),
+                array(
+                    'field'   => 'cargo',
+                    'label'   => 'Cargo',
+                    'rules'   => 'trim'
+                    ),
+                array(
+                    'field'   => 'plaza',
+                    'label'   => 'Plaza',
+                    'rules'   => 'trim'
+                    ),
+                array(
+                    'field'   => 'domicilio',
+                    'label'   => 'Domicilio',
+                    'rules'   => 'trim'
+                    ),
             ),
 
             'formCargos' => array(
